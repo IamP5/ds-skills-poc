@@ -1,0 +1,12 @@
+{
+  "$description": "Canal web: controles mais compactos.",
+  "size": {
+    "control": {
+      "min-height": {
+        "$type": "dimension",
+        "$value": "{size.40}",
+        "$description": "Altura mínima de controles"
+      }
+    }
+  }
+}

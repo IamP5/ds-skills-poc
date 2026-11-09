@@ -1,0 +1,13 @@
+[
+  { "type": "icon", "name": "arrow-left", "tags": ["seta", "voltar", "anterior", "back"], "usage": "<ds-icon name=\"arrow-left\"></ds-icon>" },
+  { "type": "icon", "name": "close", "tags": ["fechar", "x", "dispensar", "sair"], "usage": "<ds-icon name=\"close\"></ds-icon>" },
+  { "type": "icon", "name": "search", "tags": ["buscar", "pesquisar", "lupa", "procurar"], "usage": "<ds-icon name=\"search\"></ds-icon>" },
+  { "type": "icon", "name": "filter", "tags": ["filtro", "filtrar", "funil"], "usage": "<ds-icon name=\"filter\"></ds-icon>" },
+  { "type": "icon", "name": "pix", "tags": ["pix", "transferência", "pagamento"], "usage": "<ds-icon name=\"pix\"></ds-icon>" },
+  { "type": "flag", "name": "br", "tags": ["brasil", "brazil", "+55"], "usage": "<ds-flag country=\"br\"></ds-flag>" },
+  { "type": "flag", "name": "ar", "tags": ["argentina", "+54"], "usage": "<ds-flag country=\"ar\"></ds-flag>" },
+  { "type": "logo", "name": "brand-horizontal", "tags": ["logo", "marca", "header"], "usage": "<ds-logo variant=\"horizontal\"></ds-logo>" },
+  { "type": "illustration", "name": "success-check", "tags": ["sucesso", "concluído", "ok", "conclusão"], "themes": ["default", "pj"], "usage": "<ds-illustration name=\"success-check\"></ds-illustration>" },
+  { "type": "illustration", "name": "success-check-premium", "tags": ["sucesso", "concluído", "ok", "conclusão"], "themes": ["premium"], "usage": "<ds-illustration name=\"success-check-premium\"></ds-illustration>" },
+  { "type": "animation", "name": "loading-dots", "tags": ["carregando", "loading", "aguarde"], "usage": "<ds-animation name=\"loading-dots\"></ds-animation>" }
+]

@@ -1,0 +1,2877 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.316",
+  "startedAt": "2026-11-09T15:47:03.153Z",
+  "durationSeconds": 440,
+  "costUsd": 10.8332755,
+  "partial": false,
+  "suite": {
+    "root": "/Users/tuba/Dev/design-system-ai/ds-plugin",
+    "ablation": "with-without",
+    "threshold": 1,
+    "concurrency": 4,
+    "plugins": [
+      {
+        "name": "design-system",
+        "version": "0.3.0",
+        "path": "/Users/tuba/Dev/design-system-ai/ds-plugin"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "chip-premium-no-pj",
+      "dir": "evals/chip-premium-no-pj",
+      "source": "prose",
+      "promptMarkdown": "No app PJ (tema pj) quero destacar um benefício exclusivo com o ds-chip-premium. Me dá o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 15,
+      "graders": [
+        {
+          "name": "sem-branch-de-tema",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "(?<!`if \\()(?<!`)\\btheme\\s*===?\\s*['\"]",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "usa-alternativa",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "ds-chip[^>]*variant=\"highlight\"",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.15691499999999997,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T15:47:03.195Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Yko4qs/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.15768119999999997,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-09T15:47:03.195Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-xcSo11/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.15896340000000003,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:47:03.195Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-O3VHrZ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.12262020000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 20,
+            "startedAt": "2026-11-09T15:47:03.195Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-OMiVTL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1061486,
+            "judgeCostUsd": 0,
+            "durationSeconds": 15,
+            "startedAt": "2026-11-09T15:47:23.456Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-36Bath/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10572100000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 15,
+            "startedAt": "2026-11-09T15:47:26.277Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-uyklD1/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "decisao-aberta-chip",
+      "dir": "evals/decisao-aberta-chip",
+      "source": "prose",
+      "promptMarkdown": "No app do segmento premium (tema premium), quero um ds-chip-premium com o texto \"Cashback dobrado em todas as compras do mês inteiro\" e sem ícone. Me passa o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "avisa-decisao-aberta",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS se a resposta avisa que o limite de texto do rótulo e/ou o uso sem ícone do ds-chip-premium ainda não estão definidos pelo time do DS (decisão em aberto, requisito C1) e sugere confirmar com o time, mesmo que entregue um HTML provisório.\nFAIL se entrega o HTML sem mencionar que essa decisão está em aberto.",
+          "config": {
+            "criteria": "PASS se a resposta avisa que o limite de texto do rótulo e/ou o uso sem ícone do ds-chip-premium ainda não estão definidos pelo time do DS (decisão em aberto, requisito C1) e sugere confirmar com o time, mesmo que entregue um HTML provisório.\nFAIL se entrega o HTML sem mencionar que essa decisão está em aberto.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1464954,
+            "judgeCostUsd": 0.0004952000000000001,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:47:27.238Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-kxqaj0/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não vou te passar um HTML como se fosse definitivo, porque o que você pediu depende de uma decisão que o time de DS ainda não tomou.\n\nO `ds-chip-premium` existe e está pronto para uso (`built`), mas a documentação dele tem o requisito **C1 em aberto**:\n\n> **C1 [open]** Limite de texto do `rotulo` e uso sem `icone` ainda não definidos.\n\nSeu pedido bate exatamente nos dois pontos que estão em aberto:\n1. **Usar sem ícone:** ainda não está definido se isso é permitido.\n2. **Texto longo:** \"Cashback dobrado em todas as compras do mês inteiro\" tem 51 caracteres, e não existe limite definido. Não sei se o chip quebra linha, corta o texto ou se esse tamanho simplesmente não é aceito.\n\nSe eu escolhesse por conta própria, estaria tomando no lugar do time de DS uma decisão que é deles.\n\n**O que já está definido** (vem da API, que é gerada do código):\n- O texto vai no atributo `label` e o ícone no slot `icon`. A doc ainda usa os nomes antigos `rotulo`/`icone`, mas os nomes válidos são os da API.\n- O componente é só para o tema `premium`. Você está no tema certo.\n\nQuando o C1 for definido, o HTML deve ficar mais ou menos assim:\n\n```html\n<ds-chip-premium label=\"Cashback dobrado em todas as compras do mês inteiro\"></ds-chip-premium>\n```\n\nSó use isso em produção depois que o C1 for resolvido.\n\n**O que você pode fazer:**\n- **Levar o C1 para o time de DS** e perguntar se o chip pode ser usado sem ícone e qual é o limite de caracteres do `label`. É o caminho mais correto.\n- **Encurtar o texto e incluir um ícone** (por exemplo, \"Cashback em dobro\" com um ícone de cashback). Isso diminui o risco, mas não resolve o C1: mesmo com ícone e texto curto, o limite continua indefinido. Se quiser seguir assim mesmo, eu procuro o ícone no DS e passo o trecho pelo validador."
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.14541550000000003,
+            "judgeCostUsd": 0.0005883000000000002,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T15:47:29.185Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-MhmUBh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Ainda não posso te passar esse HTML como definitivo. O `ds-chip-premium` existe e está `built`, mas a doc dele tem uma decisão em aberto que afeta justamente o seu pedido:\n\n> **C1 [open]**: o limite de texto do rótulo e o uso **sem ícone** ainda não foram definidos.\n\nSeu pedido depende dos dois pontos:\n- **Texto longo:** \"Cashback dobrado em todas as compras do mês inteiro\" tem 51 caracteres. Não há limite definido, então não dá para saber se cabe, se quebra linha ou se trunca.\n- **Sem ícone:** o componente tem o slot `icon`, mas ninguém decidiu se ele pode ser usado vazio.\n\nEssa decisão é do time do DS. Se eu escolher por eles, o chip pode sair fora do padrão quando a C1 for fechada.\n\nO que dá para fazer agora:\n1. **Levar a C1 ao time do DS** (dono do `ds-chip-premium`) e pedir a definição do limite de caracteres e do uso sem ícone. Depois disso eu monto e valido o HTML.\n2. **Encurtar o texto e usar um ícone** enquanto a decisão não sai. Um rótulo curto, como \"Cashback em dobro\", com um ícone do DS reduz o risco, embora a C1 continue aberta. Posso procurar um ícone de cashback no catálogo.\n3. **Mostrar a mensagem completa fora do chip.** Se a frase inteira precisa aparecer, ela cabe melhor num texto ao lado do chip, com o chip curto só marcando que é exclusivo premium.\n\nOutra coisa que vale levar ao time: a doc chama os campos de `rotulo` e `icone`, mas a API usa `label` e o slot `icon`. O próprio catálogo marca essa referência como quebrada.\n\nQuer seguir por qual caminho?"
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1427311,
+            "judgeCostUsd": 0.0006837,
+            "durationSeconds": 22,
+            "startedAt": "2026-11-09T15:47:38.827Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-NeBiWp/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não vou te passar o HTML final ainda, porque as duas coisas que você pediu dependem de uma decisão que o time do Design System ainda não tomou.\n\nO `ds-chip-premium` existe e pode ser usado, mas a documentação dele tem uma decisão em aberto:\n\n> **C1 [open]** — Limite de texto do `rotulo` e uso sem `icone` ainda não definidos.\n\nO seu pedido depende exatamente disso:\n- **Sem ícone:** ninguém definiu ainda se o chip pode aparecer sem o slot `icon`.\n- **Texto longo:** \"Cashback dobrado em todas as compras do mês inteiro\" tem 51 caracteres. Não existe limite definido, então não dá para saber se o chip aceita esse tamanho, se corta o texto ou se quebra a linha.\n\nSe eu escolhesse por conta própria, o componente poderia passar a ser usado de um jeito que o time ainda não aprovou.\n\n**Já está definido:** a API tem `label` (string) e um slot `icon`. O chip é só para o tema `premium`, e para status (aprovado, pendente) o certo é usar o `ds-badge`.\n\n**Para seguir, uma destas opções:**\n1. **Levar a C1 ao time do DS.** Pergunte se o chip pode ficar sem ícone e qual o tamanho máximo do texto. Com a resposta, eu monto e valido o HTML.\n2. **Ajustar o pedido.** Por exemplo, \"Cashback em dobro no mês\" (24 caracteres), com um ícone do catálogo. Mesmo assim o limite de texto continua indefinido, então ainda vale confirmar com o time.\n\nSe você já tiver essa resposta, me passa que eu entrego o HTML validado para o tema premium."
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.10996389999999999,
+            "judgeCostUsd": 0.0012657,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:47:41.435Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Ei6zsf/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: FAIL PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  true,
+                  true
+                ],
+                "evidence": "Não achei a documentação do design system neste workspace. O diretório atual só tem uma pasta `.claude` vazia e nenhum arquivo com \"chip\". Então o HTML abaixo segue a convenção mais comum de Web Components, mas não consegui confirmar com a API real do `ds-chip-premium`:\n\n```html\n<div data-theme=\"premium\">\n  <ds-chip-premium>\n    Cashback dobrado em todas as compras do mês inteiro\n  </ds-chip-premium>\n</div>\n```\n\nO que eu deduzi e vale conferir na doc do DS:\n\n- **Tema premium:** usei `data-theme=\"premium\"` num container. Se o app já aplica o tema no `<html>` ou `<body>`, tire o `<div>` e use só o chip. Alguns DSs aplicam o tema por classe (`class=\"theme-premium\"`) ou por atributo no próprio componente (`theme=\"premium\"`).\n- **Sem ícone:** não coloquei nenhum ícone. Se o componente mostrar um ícone padrão quando nenhum é passado, ele deve ter uma prop para esconder, como `hide-icon` ou `icon=\"none\"`.\n- **Texto:** coloquei como conteúdo do slot. Se o componente receber o texto por atributo, fica `<ds-chip-premium label=\"Cashback dobrado em todas as compras do mês inteiro\"></ds-chip-premium>`.\n- **Tamanho do texto:** a frase é longa para um chip. Confirme se o componente quebra a linha ou corta com reticências. Se cortar, talvez valha uma versão mais curta, como \"Cashback em dobro o mês todo\".\n\nSe você me passar a doc ou o caminho do pacote do design system, eu ajusto o HTML para a API exata."
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10548679999999999,
+            "judgeCostUsd": 0.0018974,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T15:47:51.946Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-e7DrKI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: PASS FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  false,
+                  false
+                ],
+                "evidence": "Não achei a documentação do design system neste workspace: o diretório está vazio e não há arquivos sobre chip ou tema. Por isso não consegui confirmar a API real do `ds-chip-premium`. O HTML abaixo segue a convenção mais comum de web components em DS, e os nomes de atributo são suposições:\n\n```html\n<div data-theme=\"premium\">\n  <ds-chip-premium>\n    Cashback dobrado em todas as compras do mês inteiro\n  </ds-chip-premium>\n</div>\n```\n\nConfira estes pontos no seu DS antes de usar:\n\n- **Tema:** coloquei `data-theme=\"premium\"` num container. Se o app premium já aplica o tema no `<html>` ou `<body>`, tire o wrapper. Seu DS também pode usar outro nome, como `theme=\"premium\"` ou uma classe.\n- **Sem ícone:** não passei nenhum ícone (nem atributo `icon` nem slot `slot=\"icon\"`). Se o componente mostrar um ícone por padrão, provavelmente existe algo como `hide-icon` ou `icon=\"none\"` para desligar.\n- **Texto longo:** são cerca de 50 caracteres, o que é bastante para um chip. Muitos DSs truncam com reticências ou limitam a largura. Se o seu fizer isso, vale encurtar o texto (por exemplo, \"Cashback em dobro no mês todo\") ou ver se existe uma opção de quebra de linha.\n\nSe você me mandar o link ou o arquivo de docs do `ds-chip-premium`, eu ajusto o HTML para a API exata."
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1097003,
+            "judgeCostUsd": 0.0018785,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T15:47:53.256Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-OjkCC9/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "avisa-decisao-aberta",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  true
+                ],
+                "evidence": "Não achei a documentação do design system aqui no workspace (a pasta está vazia, só tem `.claude/` sem conteúdo). Então os nomes de atributos abaixo seguem a convenção mais comum de web components e **não foram conferidos** na API real do `ds-chip-premium`:\n\n```html\n<div data-theme=\"premium\">\n  <ds-chip-premium label=\"Cashback dobrado em todas as compras do mês inteiro\"></ds-chip-premium>\n</div>\n```\n\nSe o componente recebe o texto por slot em vez de atributo:\n\n```html\n<div data-theme=\"premium\">\n  <ds-chip-premium>Cashback dobrado em todas as compras do mês inteiro</ds-chip-premium>\n</div>\n```\n\nAntes de usar, vale conferir três coisas:\n\n1. **Tema premium:** usei `data-theme=\"premium\"` num container. Se o tema já é aplicado na raiz do app do segmento, pode tirar o wrapper. Também pode ser que o DS use outro nome, como uma classe ou `theme=\"premium\"`.\n2. **Sem ícone:** não passei nenhum atributo de ícone (`icon`, `leading-icon` etc.). Se o componente mostra um ícone por padrão, provavelmente existe algo como `icon=\"none\"` ou `hide-icon` para desligar.\n3. **Tamanho do texto:** são 51 caracteres, o que é longo para um chip. Muitos design systems limitam o texto do chip (algo em torno de 20 a 30 caracteres) e cortam com reticências ou não deixam quebrar linha. Se esse limite existir, uma versão mais curta como \"Cashback em dobro no mês\" encaixa melhor, ou então dá para usar um componente de banner ou tag no lugar.\n\nSe você me passar a documentação ou o caminho do pacote do DS, eu confirmo os atributos certos e ajusto o HTML."
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.3333333333333333,
+        "passRateWithout": 0.3333333333333333,
+        "delta": 0.6666666666666667
+      }
+    },
+    {
+      "name": "dialogo-depreciado",
+      "dir": "evals/dialogo-depreciado",
+      "source": "prose",
+      "promptMarkdown": "Preciso de um diálogo de confirmação pra excluir favorecido. Posso usar o ds-old-dialog que já tá no projeto? Me passa o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 15,
+      "graders": [
+        {
+          "name": "criterio",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS se a resposta diz que ds-old-dialog está depreciado e entrega um exemplo com ds-modal, com a ação de excluir usando um botão de variante destrutiva (danger).\nFAIL se recomenda ds-old-dialog, se não menciona a depreciação, ou se não há exemplo com ds-modal.",
+          "config": {
+            "criteria": "PASS se a resposta diz que ds-old-dialog está depreciado e entrega um exemplo com ds-modal, com a ação de excluir usando um botão de variante destrutiva (danger).\nFAIL se recomenda ds-old-dialog, se não menciona a depreciação, ou se não há exemplo com ds-modal.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "nao-usa-depreciado",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "<ds-old-dialog",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "sugere-modal",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "<ds-modal",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.16987449999999998,
+            "judgeCostUsd": 0.0003201000000000007,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-09T15:48:01.113Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-R2VIuL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não use o `ds-old-dialog`. Ele está **depreciado** e o DS aponta o `ds-modal` como substituto. O `ds-modal` tem uma regra própria pra confirmação de ação destrutiva: o título é uma pergunta e o rodapé leva um botão `danger` e um `ghost`.\n\n```html\n<ds-modal id=\"confirmar-exclusao\" heading=\"Excluir favorecido?\" size=\"sm\">\n  <p>Essa ação não pode ser desfeita.</p>\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" id=\"cancelar-exclusao\">Cancelar</ds-button>\n    <ds-button variant=\"danger\" id=\"confirmar-excluir\">Excluir</ds-button>\n  </div>\n</ds-modal>\n\n<script>\n  const modal = document.getElementById('confirmar-exclusao');\n  const fechar = () => { modal.open = false; };\n\n  // para abrir: modal.open = true;\n  document.getElementById('cancelar-exclusao').addEventListener('click', fechar);\n  document.getElementById('confirmar-excluir').addEventListener('click', async () => {\n    await excluirFavorecido(); // sua chamada de exclusão\n    fechar();\n  });\n  modal.addEventListener('dsClose', fechar); // Esc / fechar pelo próprio modal\n</script>\n```\n\nO trecho passou no `ds_validate` sem erros.\n\n**Se você já tem código com `ds-old-dialog`,** a troca é assim:\n- `title` vira `heading`\n- `show()` vira `open = true`\n- o evento `closed` vira `dsClose`\n\n**O que o `ds-modal` já faz sozinho:**\n- prende o foco dentro do modal enquanto ele está aberto\n- fecha com Esc\n- devolve o foco a quem abriu o modal\n- trava o scroll da página\n\nPor isso, não mexa em `document.body.style.overflow`. Se esse modal precisar abrir por cima de outro overlay, como um sheet, abra pelo template `OverlayStack`.\n\n**Uma inconsistência na documentação:** os requisitos do `ds-modal` falam em `titulo`, `aberto` e `rodape`, mas a API e o exemplo usam `heading`, `open` e `footer`. Usei os nomes da API, que são os que o validador aceita. Vale avisar o time do DS pra corrigirem o texto."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1665915,
+            "judgeCostUsd": 0.0003321000000000001,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-09T15:48:06.378Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ttJVt3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não use o `ds-old-dialog`: ele está **depreciado**, e o Design System indica o `ds-modal` no lugar. Para uma confirmação de exclusão, o `ds-modal` já faz o necessário: prende o foco dentro do modal, fecha com `Esc`, devolve o foco ao botão que o abriu e trava o scroll da página.\n\n```html\n<ds-modal id=\"modal-excluir-favorecido\" heading=\"Excluir favorecido?\" size=\"sm\">\n  <p>Essa ação não pode ser desfeita.</p>\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" id=\"cancelar-exclusao\">Cancelar</ds-button>\n    <ds-button variant=\"danger\" id=\"confirmar-exclusao\">Excluir</ds-button>\n  </div>\n</ds-modal>\n\n<script>\n  const modal = document.getElementById('modal-excluir-favorecido');\n\n  function abrirConfirmacao() { modal.open = true; }\n  function fechar() { modal.open = false; }\n\n  document.getElementById('cancelar-exclusao').addEventListener('click', fechar);\n  document.getElementById('confirmar-exclusao').addEventListener('click', async () => {\n    await excluirFavorecido(); // sua chamada\n    fechar();\n  });\n  modal.addEventListener('dsClose', fechar); // Esc / fechar pelo modal\n</script>\n```\n\nO HTML passou no `ds_validate` sem erros.\n\nRegras do DS para confirmação de exclusão:\n- **Título:** tem que ser uma pergunta (\"Excluir favorecido?\").\n- **Botões:** ficam no slot `footer`, com `danger` para excluir e `ghost` para cancelar.\n- **Scroll:** não mexa em `document.body.style.overflow`, porque o modal já trava o scroll da página.\n- **Vários overlays:** se o modal abrir por cima de outro overlay (por exemplo, um sheet), abra pelo template `OverlayStack`.\n\nSe você estiver trocando algum `ds-old-dialog` que já existe, a conversão é: `title` → `heading`, `show()` → `open = true`, evento `closed` → `dsClose`.\n\nA documentação do `ds-modal` está inconsistente. Os requisitos usam nomes em português (`titulo`, `aberto`, `rodape`), mas a API real é `heading`, `open` e `footer`. Usei os nomes da API, que é o que vale no código. Vale avisar o time do DS para corrigir."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.16368700000000003,
+            "judgeCostUsd": 0.0006332000000000013,
+            "durationSeconds": 27,
+            "startedAt": "2026-11-09T15:48:15.507Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-RJGPb8/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não use o `ds-old-dialog`. Ele está **depreciado** no Design System, e o substituto oficial é o **`ds-modal`**. O próprio DS traz exemplo para o seu caso, que é confirmar a exclusão de um favorecido:\n\n```html\n<ds-modal id=\"modal-excluir-favorecido\" heading=\"Excluir favorecido?\" size=\"sm\">\n  <p>Essa ação não pode ser desfeita.</p>\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" id=\"btn-cancelar\">Cancelar</ds-button>\n    <ds-button variant=\"danger\" id=\"btn-excluir\">Excluir</ds-button>\n  </div>\n</ds-modal>\n\n<script>\n  const modal = document.getElementById('modal-excluir-favorecido');\n\n  function abrirConfirmacao() { modal.open = true; }\n  function fechar() { modal.open = false; }\n\n  document.getElementById('btn-cancelar').addEventListener('click', fechar);\n  document.getElementById('btn-excluir').addEventListener('click', () => {\n    // chamar a exclusão aqui\n    fechar();\n  });\n  modal.addEventListener('dsClose', fechar); // Esc ou fechar pelo modal\n</script>\n```\n\nO `ds_validate` não apontou nenhum erro nesse HTML.\n\n**Para seguir o padrão do DS:**\n- Numa ação destrutiva, o título precisa ser uma pergunta e o rodapé leva `danger` + `ghost`, como acima.\n- Não trave o scroll com `document.body.style.overflow`. O `ds-modal` já faz isso pelo `BodyScrollManager`.\n- Focus trap, fechar com `Esc` e devolver o foco a quem abriu o modal já vêm prontos.\n- Se o modal for abrir por cima de outro overlay, como um sheet, abra pelo template `OverlayStack`.\n\n**Se for migrar telas que ainda usam o `ds-old-dialog`:**\n\n| antes | depois |\n|---|---|\n| `title` | `heading` |\n| `show()` | `open = true` |\n| evento `closed` | evento `dsClose` |"
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.3333333333333333,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.12748659999999998,
+            "judgeCostUsd": 0.0008066000000000011,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-09T15:48:17.125Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-qHAodw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "Procurei no projeto e **não encontrei nada do `ds-old-dialog`**. O diretório de trabalho está praticamente vazio: tem só uma pasta `.claude` vazia, nenhum componente e nenhuma documentação do design system. Então não consigo confirmar a API dele (atributos, slots, eventos), e não vou inventar uma.\n\nSobre usar ou não: o prefixo \"old\" costuma indicar componente **depreciado**. Antes de usar, vale ver na documentação do design system se existe um substituto atual (algo como `ds-dialog` ou `ds-modal`). Se você me passar o caminho do pacote ou a doc, eu monto com o componente certo.\n\nEnquanto isso, segue uma versão com o `<dialog>` nativo do HTML, que não depende do DS e já cuida de foco, tecla Esc e backdrop:\n\n```html\n<dialog id=\"confirmar-exclusao-favorecido\"\n        aria-labelledby=\"dlg-titulo\"\n        aria-describedby=\"dlg-descricao\">\n  <form method=\"dialog\">\n    <h2 id=\"dlg-titulo\">Excluir favorecido?</h2>\n    <p id=\"dlg-descricao\">\n      <strong data-nome-favorecido>João da Silva</strong> será removido da sua lista\n      de favorecidos. Essa ação não pode ser desfeita.\n    </p>\n\n    <div class=\"acoes\">\n      <button value=\"cancelar\" autofocus>Cancelar</button>\n      <button value=\"confirmar\" class=\"perigo\">Excluir</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\n  const dlg = document.getElementById('confirmar-exclusao-favorecido');\n\n  function abrirConfirmacao(nome, onConfirmar) {\n    dlg.querySelector('[data-nome-favorecido]').textContent = nome;\n    dlg.returnValue = '';\n    dlg.showModal();\n    dlg.addEventListener('close', () => {\n      if (dlg.returnValue === 'confirmar') onConfirmar();\n    }, { once: true });\n  }\n\n  // Exemplo de uso:\n  // abrirConfirmacao('João da Silva', () => excluirFavorecido(id));\n</script>\n```\n\nAlgumas decisões:\n- **O foco começa em \"Cancelar\"**, para que um Enter acidental não exclua o favorecido.\n- **O botão de confirmar diz \"Excluir\"** em vez de \"OK\" ou \"Sim\", para deixar claro o que vai acontecer.\n- **O nome do favorecido aparece na mensagem**, para o usuário ter certeza de qual está excluindo.\n- **Esc ou clique em \"Cancelar\" fecham sem excluir**, porque o `returnValue` fica diferente de `confirmar`.\n\nSe você me mostrar onde está o `ds-old-dialog` (ou o componente que o substitui), eu adapto esse HTML para ele."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.3333333333333333,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.1225753,
+            "judgeCostUsd": 0.0003351000000000005,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T15:48:30.975Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-iIOrYb/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "Procurei aqui e **não encontrei o `ds-old-dialog`**. O diretório de trabalho (`cwd`) só tem uma pasta `.claude` vazia: não há código, `package.json` nem docs do design system. Por isso não consigo confirmar a API dele, e não vou inventar atributos que podem não existir.\n\nO próprio nome \"old\" sugere que ele foi **descontinuado**. Nesse caso, o normal é usar o substituto atual (algo como `ds-dialog` ou `ds-modal`), e não ele. Antes de usar, vale conferir na documentação ou no changelog do DS se ele está marcado como deprecated e qual componente substitui.\n\nEnquanto isso, segue um diálogo de confirmação com o `<dialog>` nativo do HTML. Ele é acessível e fácil de trocar pelo componente do DS depois:\n\n```html\n<button type=\"button\" id=\"btn-excluir\">Excluir favorecido</button>\n\n<dialog id=\"dlg-excluir\" aria-labelledby=\"dlg-excluir-titulo\" aria-describedby=\"dlg-excluir-desc\">\n  <form method=\"dialog\">\n    <h2 id=\"dlg-excluir-titulo\">Excluir favorecido?</h2>\n    <p id=\"dlg-excluir-desc\">\n      <strong id=\"dlg-excluir-nome\">João da Silva</strong> será removido da sua lista de favorecidos.\n      Essa ação não pode ser desfeita.\n    </p>\n    <div class=\"acoes\">\n      <button value=\"cancelar\" autofocus>Cancelar</button>\n      <button value=\"confirmar\" class=\"perigo\">Excluir</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\n  const dlg = document.getElementById('dlg-excluir');\n  document.getElementById('btn-excluir').addEventListener('click', () => dlg.showModal());\n  dlg.addEventListener('close', () => {\n    if (dlg.returnValue === 'confirmar') {\n      // chamar a exclusão aqui\n    }\n  });\n</script>\n```\n\nEscolhas de UX: o foco começa em **Cancelar**, porque a ação é destrutiva. O botão de confirmar diz \"Excluir\" em vez de \"OK\". O nome do favorecido aparece no texto. O Esc fecha o diálogo como cancelamento.\n\nSe você me passar o caminho do projeto que usa o DS (ou a doc do componente), eu confiro se o `ds-old-dialog` está descontinuado e reescrevo isso com o componente certo."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.3333333333333333,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.12140980000000001,
+            "judgeCostUsd": 0.0005088000000000002,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:48:36.790Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-bbyid3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "Não achei o `ds-old-dialog` aqui. O diretório de trabalho só tem uma pasta `.claude` vazia, sem código, sem `package.json` e sem docs do design system. Por isso não consigo confirmar a API dele (atributos, slots, eventos) e preferi não inventar.\n\nO nome \"old\" sugere que ele foi depreciado. Na maioria dos design systems, componentes assim foram substituídos (por algo como `ds-dialog` ou `ds-modal`) e não devem entrar em código novo. Antes de usar, vale ver no changelog ou na doc do DS se existe um substituto.\n\nEnquanto isso, segue uma versão com o `<dialog>` nativo do HTML. Ela já é acessível (foco preso no diálogo, fecha com Esc, `aria` correto) e fica fácil trocar pelo componente do DS depois:\n\n```html\n<button type=\"button\" id=\"btn-excluir-favorecido\">Excluir favorecido</button>\n\n<dialog id=\"dialog-excluir-favorecido\"\n        aria-labelledby=\"dialog-excluir-titulo\"\n        aria-describedby=\"dialog-excluir-descricao\">\n  <form method=\"dialog\">\n    <h2 id=\"dialog-excluir-titulo\">Excluir favorecido?</h2>\n    <p id=\"dialog-excluir-descricao\">\n      <strong data-nome-favorecido>Fulano de Tal</strong> será removido da sua lista de favorecidos.\n      Essa ação não pode ser desfeita.\n    </p>\n\n    <div class=\"dialog-acoes\">\n      <button type=\"submit\" value=\"cancelar\" autofocus>Cancelar</button>\n      <button type=\"submit\" value=\"confirmar\" class=\"btn-perigo\">Excluir</button>\n    </div>\n  </form>\n</dialog>\n\n<script>\n  const dialog = document.getElementById('dialog-excluir-favorecido');\n\n  document.getElementById('btn-excluir-favorecido')\n    .addEventListener('click', () => dialog.showModal());\n\n  dialog.addEventListener('close', () => {\n    if (dialog.returnValue === 'confirmar') {\n      // chamar a exclusão do favorecido aqui\n    }\n  });\n</script>\n```\n\nAlgumas escolhas desse HTML:\n- **O foco começa em \"Cancelar\"** (`autofocus`), pra um Enter acidental não excluir o favorecido.\n- **O botão diz \"Excluir\"**, e não \"OK\" ou \"Sim\", pra deixar claro o que acontece ao clicar.\n- **O nome do favorecido aparece no texto**, pra pessoa ter certeza de qual está excluindo.\n\nSe você me passar o caminho do projeto que usa o DS, ou a doc do `ds-old-dialog` e do substituto dele, eu adapto esse HTML pro componente certo."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.3333333333333333,
+        "passRateWithout": 0,
+        "delta": 0.6666666666666667
+      }
+    },
+    {
+      "name": "dispara-cor-erro",
+      "dir": "evals/dispara-cor-erro",
+      "source": "prose",
+      "promptMarkdown": "Qual cor uso na mensagem de erro de validação do campo de chave PIX? Me diz o que colocar no CSS.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 10,
+      "graders": [
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "token-de-erro",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "color\\.feedback\\.error|--ds-color-feedback-error",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 11,
+            "costUsd": 0.2007692,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-09T15:48:42.239Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-aovkEe/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "token-de-erro",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched color\\.feedback\\.error|--ds-color-feedback-error",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.1769236,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:48:42.882Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-13BVuv/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "token-de-erro",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched color\\.feedback\\.error|--ds-color-feedback-error",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.1806248,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-09T15:48:55.251Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-xdAY3v/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "token-de-erro",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched color\\.feedback\\.error|--ds-color-feedback-error",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1096826,
+            "judgeCostUsd": 0,
+            "durationSeconds": 17,
+            "startedAt": "2026-11-09T15:49:01.678Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-SYRbWm/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "token-de-erro",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10975859999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 18,
+            "startedAt": "2026-11-09T15:49:06.044Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Z17trL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "token-de-erro",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10635320000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 14,
+            "startedAt": "2026-11-09T15:49:17.118Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-oAoAbn/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "token-de-erro",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 1
+      }
+    },
+    {
+      "name": "dispara-espacamento-cards",
+      "dir": "evals/dispara-espacamento-cards",
+      "source": "prose",
+      "promptMarkdown": "Os cards da home estão muito colados um no outro. Que espaçamento eu uso entre eles? Me passa o CSS.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 10,
+      "graders": [
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "usa-space-stack",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "space\\.stack|--ds-space-stack|ds-stack-",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 11,
+            "costUsd": 0.20207300000000003,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-09T15:49:19.137Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-M665fj/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-space-stack",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched space\\.stack|--ds-space-stack|ds-stack-",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 8,
+            "costUsd": 0.17057719999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:49:23.340Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-BN9xko/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-space-stack",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched space\\.stack|--ds-space-stack|ds-stack-",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 10,
+            "costUsd": 0.1941566,
+            "judgeCostUsd": 0,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:49:24.359Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-g2JvCg/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-space-stack",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched space\\.stack|--ds-space-stack|ds-stack-",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10526080000000002,
+            "judgeCostUsd": 0,
+            "durationSeconds": 15,
+            "startedAt": "2026-11-09T15:49:31.592Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-H5bQKm/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "usa-space-stack",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1044618,
+            "judgeCostUsd": 0,
+            "durationSeconds": 15,
+            "startedAt": "2026-11-09T15:49:46.251Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-aXmoHo/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "usa-space-stack",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1065768,
+            "judgeCostUsd": 0,
+            "durationSeconds": 17,
+            "startedAt": "2026-11-09T15:49:46.303Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-EmPWmK/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "usa-space-stack",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 1
+      }
+    },
+    {
+      "name": "gap-tooltip",
+      "dir": "evals/gap-tooltip",
+      "source": "prose",
+      "promptMarkdown": "Me passa o HTML de um tooltip do design system explicando a taxa da TED, no ícone de informação ao lado do valor.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "aponta-gap",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS se a resposta diz que o design system não tem componente de tooltip (é um gap do DS) e não apresenta `<ds-tooltip>` nem outro componente inexistente como se existisse. Pode propor alternativa com o que existe ou sugerir levar ao time do DS.\nFAIL se entrega `<ds-tooltip>` (ou outro `ds-*` que não existe) como solução pronta, ou se não menciona que o componente não existe.",
+          "config": {
+            "criteria": "PASS se a resposta diz que o design system não tem componente de tooltip (é um gap do DS) e não apresenta `<ds-tooltip>` nem outro componente inexistente como se existisse. Pode propor alternativa com o que existe ou sugerir levar ao time do DS.\nFAIL se entrega `<ds-tooltip>` (ou outro `ds-*` que não existe) como solução pronta, ou se não menciona que o componente não existe.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 16,
+            "costUsd": 0.31890850000000004,
+            "judgeCostUsd": 0.0006765000000000009,
+            "durationSeconds": 65,
+            "startedAt": "2026-11-09T15:49:47.033Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-r7qLsd/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "O Design System não tem tooltip nem ícone de informação. Também não tem botão só com ícone: o `ds-button` exige texto e manda esse caso para um `ds-icon-button`, que ainda não existe. Por isso montei o tooltip com HTML nativo acessível e só tokens semânticos, sem inventar nenhum `ds-*`. Passei o código no `ds_validate` e não deu erro. Sobrou um aviso, que deixei suprimido com o motivo escrito no próprio código.\n\n```html\n<style>\n  .valor-ted {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--ds-space-inset-sm);\n    font: var(--ds-font-body);\n    color: var(--ds-color-text-default);\n  }\n  .info-tip {\n    position: relative;\n    display: inline-flex;\n  }\n  .info-tip__trigger {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    min-width: var(--ds-size-control-min-height);\n    min-height: var(--ds-size-control-min-height);\n    padding: 0;\n    border: 0;\n    background: transparent;\n    color: var(--ds-color-text-subtle);\n    border-radius: var(--ds-radius-control);\n    cursor: pointer;\n  }\n  .info-tip__trigger:focus-visible {\n    outline: 2px solid var(--ds-color-action-primary);\n    outline-offset: 2px;\n  }\n  .info-tip__icon {\n    width: 1.25em;\n    height: 1.25em;\n  }\n  .info-tip__bubble {\n    position: absolute;\n    bottom: 100%;\n    left: 50%;\n    transform: translateX(-50%);\n    width: max-content;\n    max-width: 16rem;\n    padding: var(--ds-space-inset-sm) var(--ds-space-inset-md);\n    background: var(--ds-color-surface-raised);\n    color: var(--ds-color-text-default);\n    font: var(--ds-font-body);\n    border-radius: var(--ds-radius-container);\n    visibility: hidden;\n    opacity: 0;\n  }\n  .info-tip:hover .info-tip__bubble,\n  .info-tip:focus-within .info-tip__bubble {\n    visibility: visible;\n    opacity: 1;\n  }\n  .info-tip[data-dismissed] .info-tip__bubble {\n    visibility: hidden;\n    opacity: 0;\n  }\n</style>\n\n<p class=\"valor-ted\">\n  <span>Taxa da TED: <strong>R$ 10,90</strong></span>\n  <span class=\"info-tip\">\n    <!-- ds-ignore mimic -- botão só com ícone é escopo do ds-icon-button, que ainda não existe no DS (gap) -->\n    <button type=\"button\" class=\"info-tip__trigger\" aria-label=\"Sobre a taxa da TED\" aria-describedby=\"tip-taxa-ted\">\n      <svg class=\"info-tip__icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n        <circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/>\n        <line x1=\"12\" y1=\"11\" x2=\"12\" y2=\"17\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n        <circle cx=\"12\" cy=\"7.5\" r=\"1.25\" fill=\"currentColor\"/>\n      </svg>\n    </button>\n    <span role=\"tooltip\" id=\"tip-taxa-ted\" class=\"info-tip__bubble\">\n      Cobrada por TED enviada. O valor cai na conta de destino no mesmo dia útil se a transferência for feita até as 17h.\n    </span>\n  </span>\n</p>\n\n<script>\n  // Esc fecha o tooltip sem tirar o foco (WCAG 1.4.13)\n  document.querySelectorAll('.info-tip').forEach((tip) => {\n    const reset = () => tip.removeAttribute('data-dismissed');\n    tip.addEventListener('keydown', (e) => {\n      if (e.key === 'Escape') tip.setAttribute('data-dismissed', '');\n    });\n    tip.addEventListener('mouseleave', reset);\n    tip.addEventListener('focusout', reset);\n  });\n</script>\n```\n\n**Acessibilidade:** o tooltip abre com o mouse em cima e quando o botão recebe foco pelo teclado. Leitores de tela leem o texto pelo `aria-describedby`, a tecla Esc fecha o tooltip e a área de toque segue `size.control.min-height`.\n\n**Ajuste antes de usar:** o valor (R$ 10,90) e o texto sobre a taxa são exemplos. Troque pelo valor e pela regra reais do produto.\n\n**Gaps do DS para levar ao time:**\n- **Componente de tooltip:** não existe.\n- **`ds-icon-button`:** o DS indica esse componente para botões só com ícone, mas ele não existe. Por isso usei um `<button>` nativo.\n- **Ícone de informação:** não tem no catálogo. Fiz um SVG inline que usa a cor do texto em volta.\n- **Tokens que faltam:** não existe token de fundo invertido para tooltip, então usei `surface.raised` com `text.default`. Também faltam tokens de sombra ou borda para separar o balão do fundo, e de espessura do contorno de foco. Hoje o contorno usa `2px` direto no código; o validador aceitou, mas o ideal é virar token.\n- **Empilhamento:** não usei `z-index`, porque o `OverlayStack` só existe para modais empilhados. Se o tooltip ficar escondido atrás de outro elemento, falta no DS uma camada definida para tooltips."
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 17,
+            "costUsd": 0.3256573,
+            "judgeCostUsd": 0.0013097000000000004,
+            "durationSeconds": 68,
+            "startedAt": "2026-11-09T15:49:48.914Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ibNiQg/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "O Design System **não tem componente de tooltip nem ícone de informação**. Procurei por \"tooltip\", \"info\" e \"ajuda\" e nenhuma busca trouxe resultado. Por isso montei com HTML nativo acessível, usando só tokens semânticos e utilitários do DS. O validador do DS não acusa nenhum erro. Ficaram dois avisos, que suprimi com o motivo escrito no código.\n\n```html\n<style>\n  .fee-row { display: flex; align-items: center; gap: var(--ds-space-inset-sm); }\n  .fee-info { position: relative; display: inline-flex; }\n  .fee-info__trigger {\n    display: inline-flex; align-items: center; justify-content: center;\n    min-width: var(--ds-size-control-min-height);\n    min-height: var(--ds-size-control-min-height);\n    padding: 0; border: 0; background: none; cursor: pointer;\n    color: var(--ds-color-text-subtle); font: var(--ds-font-label);\n    border-radius: var(--ds-radius-control);\n  }\n  .fee-info__trigger:focus-visible { outline: auto; }\n  .fee-info__bubble {\n    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);\n    width: max-content; max-width: 16rem;\n    padding: var(--ds-space-inset-sm) var(--ds-space-inset-md);\n    background: var(--ds-color-surface-raised);\n    color: var(--ds-color-text-default);\n    font: var(--ds-font-body);\n    border-radius: var(--ds-radius-container);\n    /* ds-ignore manual-zindex -- tooltip local ao gatilho, não é overlay empilhado (OverlayStack não se aplica) */\n    visibility: hidden; opacity: 0; z-index: 1;\n  }\n  .fee-info:hover .fee-info__bubble,\n  .fee-info:focus-within .fee-info__bubble { visibility: visible; opacity: 1; }\n</style>\n\n<div class=\"fee-row\">\n  <span class=\"ds-text-subtle\">Taxa TED</span>\n  <strong class=\"ds-text-default\">R$ X,XX</strong>\n  <span class=\"fee-info\">\n    <!-- ds-ignore mimic -- ds-button exige label; ds-icon-button (dono do caso só-ícone) não existe no DS -->\n    <button type=\"button\" class=\"fee-info__trigger\" aria-describedby=\"ted-fee-tip\">\n      <span aria-hidden=\"true\">ⓘ</span>\n      <span class=\"ds-visually-hidden\">Sobre a taxa da TED</span>\n    </button>\n    <span role=\"tooltip\" id=\"ted-fee-tip\" class=\"fee-info__bubble\">\n      Valor cobrado por cada transferência TED enviada para outro banco.\n    </span>\n  </span>\n</div>\n\n<script>\n  // Esc fecha o tooltip (WCAG 1.4.13)\n  document.querySelectorAll('.fee-info__trigger').forEach((btn) => {\n    btn.addEventListener('keydown', (e) => { if (e.key === 'Escape') btn.blur(); });\n  });\n</script>\n```\n\n**Como funciona:**\n- O tooltip abre ao passar o mouse e também ao focar pelo teclado. Esc fecha.\n- O leitor de tela anuncia o botão como \"Sobre a taxa da TED\" e lê o texto do tooltip junto, via `aria-describedby`.\n- A área de toque segue `size.control.min-height`, que muda conforme o canal.\n\n**Antes de usar, troque:**\n- O valor `R$ X,XX` pela taxa real.\n- O texto do tooltip, que é um exemplo. Não sei a regra de cobrança de vocês.\n\n**O que falta no DS:**\n1. **Tooltip:** não existe componente. O ideal é o time de DS criar um.\n2. **Ícone de informação:** não existe no catálogo, então usei o caractere `ⓘ` provisoriamente.\n3. **Botão só com ícone:** o `ds-button` aponta o `ds-icon-button` como o componente certo para esse caso, mas ele não existe. Por isso usei um `<button>` nativo.\n4. **Sombra:** não há token para sombra ou elevação. Tirei a sombra do balão, então ele se separa do fundo só pela cor de `color.surface.raised`."
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 13,
+            "costUsd": 0.2769075999999999,
+            "judgeCostUsd": 0.0015782,
+            "durationSeconds": 57,
+            "startedAt": "2026-11-09T15:50:01.193Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-G4lXEy/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não existe tooltip no Design System. Fiz em HTML nativo e acessível, usando só tokens semânticos, e o `ds_validate` passou sem erros. O conteúdo da taxa (valor e texto) é placeholder, porque não tenho a regra real da TED: troque pelo texto aprovado.\n\n```html\n<div class=\"fee-row\">\n  <span class=\"fee-label\">Taxa TED</span>\n  <span class=\"fee-value\">R$ 0,00</span>\n\n  <span class=\"info-tip\">\n    <!-- ds-ignore mimic -- botão só com ícone é escopo de ds-icon-button, que ainda não existe no DS -->\n    <button type=\"button\" class=\"info-tip__trigger\"\n            aria-label=\"Sobre a taxa da TED\"\n            aria-describedby=\"tip-taxa-ted\">i</button>\n    <span role=\"tooltip\" id=\"tip-taxa-ted\" class=\"info-tip__bubble\">\n      Cobrada por transferência TED enviada. O valor é descontado do seu saldo no momento do envio.\n    </span>\n  </span>\n</div>\n\n<style>\n  .fee-row {\n    display: flex;\n    align-items: center;\n    gap: var(--ds-space-inset-sm);\n    font: var(--ds-font-body);\n    color: var(--ds-color-text-default);\n  }\n  .fee-label { color: var(--ds-color-text-subtle); }\n\n  .info-tip { position: relative; display: inline-flex; }\n\n  .info-tip__trigger {\n    min-width: var(--ds-size-control-min-height);\n    min-height: var(--ds-size-control-min-height);\n    padding: 0;\n    border: 0;\n    background: transparent;\n    color: var(--ds-color-text-subtle);\n    font: var(--ds-font-label);\n    border-radius: var(--ds-radius-control);\n    cursor: pointer;\n  }\n  .info-tip__trigger:focus-visible {\n    outline: 2px solid var(--ds-color-action-primary);\n  }\n\n  .info-tip__bubble {\n    position: absolute;\n    bottom: 100%;\n    left: 50%;\n    transform: translateX(-50%);\n    width: max-content;\n    max-width: 20rem;\n    padding: var(--ds-space-inset-sm) var(--ds-space-inset-md);\n    background: var(--ds-color-surface-raised);\n    color: var(--ds-color-text-default);\n    font: var(--ds-font-body);\n    border-radius: var(--ds-radius-container);\n    visibility: hidden;\n    opacity: 0;\n  }\n  .info-tip:hover .info-tip__bubble,\n  .info-tip:focus-within .info-tip__bubble,\n  .info-tip.is-open .info-tip__bubble {\n    visibility: visible;\n    opacity: 1;\n  }\n  .info-tip.is-dismissed .info-tip__bubble {\n    visibility: hidden;\n    opacity: 0;\n  }\n</style>\n\n<script>\n  document.querySelectorAll('.info-tip').forEach((tip) => {\n    const trigger = tip.querySelector('.info-tip__trigger');\n    // Toque no mobile: abre e fecha\n    trigger.addEventListener('click', () => {\n      tip.classList.remove('is-dismissed');\n      tip.classList.toggle('is-open');\n    });\n    // Esc fecha (WCAG 1.4.13)\n    tip.addEventListener('keydown', (e) => {\n      if (e.key === 'Escape') {\n        tip.classList.remove('is-open');\n        tip.classList.add('is-dismissed');\n      }\n    });\n    tip.addEventListener('mouseleave', () => tip.classList.remove('is-dismissed'));\n    trigger.addEventListener('blur', () => tip.classList.remove('is-open', 'is-dismissed'));\n  });\n</script>\n```\n\n**Como funciona:** o tooltip abre ao passar o mouse, ao focar com teclado ou ao tocar, e fecha com Esc. O leitor de tela lê o texto pelo `aria-describedby`. A área de toque segue `size.control.min-height`, que muda conforme o canal.\n\n**O que falta no DS e precisa ir para o time:**\n1. **Não há componente de tooltip.** Este HTML é uma solução provisória até existir um `ds-tooltip`.\n2. **Não há ícone de informação no catálogo.** Coloquei a letra \"i\" no lugar do ícone. Quando o ícone existir, é só trocar.\n3. **`ds-icon-button` não existe.** O `ds-button` exige texto visível e manda botões só com ícone para o `ds-icon-button`, que ainda não foi criado. Por isso usei `<button>` nativo e marquei com um `ds-ignore` explicando o motivo.\n4. **Faltam alguns tokens.** Não existe token de borda/contorno de foco nem de largura máxima. O `outline: 2px` e o `max-width: 20rem` são valores fixos. O validador aceitou os dois, mas o ideal é ter tokens para eles."
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.130976,
+            "judgeCostUsd": 0.0011776,
+            "durationSeconds": 32,
+            "startedAt": "2026-11-09T15:50:03.159Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-S3xK4U/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "Não achei o design system de vocês por aqui: a pasta de trabalho está vazia e não há documentação nem pacote de componentes que eu consiga ler. Então não sei as classes, tokens nem o markup oficial do tooltip de vocês.\n\nAbaixo está uma versão genérica e acessível. Para encaixar no design system, me diga qual é (nome do pacote, link da doc ou um exemplo de tooltip já usado) e eu adapto.\n\n```html\n<div class=\"valor-ted\">\n  <span class=\"valor-ted__label\">Taxa da TED</span>\n  <span class=\"valor-ted__valor\">R$ 0,00</span> <!-- substituir pelo valor real -->\n\n  <span class=\"tooltip\">\n    <button\n      type=\"button\"\n      class=\"tooltip__trigger\"\n      aria-label=\"Saiba mais sobre a taxa da TED\"\n      aria-describedby=\"tooltip-taxa-ted\"\n    >\n      <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\">\n        <circle cx=\"8\" cy=\"8\" r=\"7\" stroke=\"currentColor\" stroke-width=\"1.5\"/>\n        <path d=\"M8 7v4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/>\n        <circle cx=\"8\" cy=\"4.75\" r=\"0.9\" fill=\"currentColor\"/>\n      </svg>\n    </button>\n\n    <span role=\"tooltip\" id=\"tooltip-taxa-ted\" class=\"tooltip__content\">\n      Cobramos uma taxa por TED enviada. Ela é descontada do seu saldo\n      no momento da transferência. <!-- revisar o texto com a regra real de cobrança -->\n    </span>\n  </span>\n</div>\n\n<style>\n  .valor-ted { display: inline-flex; align-items: center; gap: 4px; }\n\n  .tooltip { position: relative; display: inline-flex; }\n\n  .tooltip__trigger {\n    display: inline-flex; padding: 2px; border: 0; background: none;\n    color: #5b6170; cursor: pointer; border-radius: 50%;\n  }\n  .tooltip__trigger:focus-visible { outline: 2px solid #2f6fed; outline-offset: 2px; }\n\n  .tooltip__content {\n    position: absolute; bottom: calc(100% + 8px); left: 50%;\n    transform: translateX(-50%);\n    width: max-content; max-width: 240px;\n    padding: 8px 12px; border-radius: 6px;\n    background: #1f2430; color: #fff;\n    font-size: 13px; line-height: 1.4;\n    opacity: 0; visibility: hidden; pointer-events: none;\n    transition: opacity .15s ease;\n    z-index: 10;\n  }\n  .tooltip__content::after {\n    content: \"\"; position: absolute; top: 100%; left: 50%;\n    transform: translateX(-50%);\n    border: 6px solid transparent; border-top-color: #1f2430;\n  }\n\n  .tooltip:hover .tooltip__content,\n  .tooltip:focus-within .tooltip__content,\n  .tooltip.is-open .tooltip__content { opacity: 1; visibility: visible; }\n\n  .tooltip.is-dismissed .tooltip__content { opacity: 0; visibility: hidden; }\n</style>\n\n<script>\n  // Esc fecha o tooltip; toque no mobile abre e fecha\n  document.querySelectorAll('.tooltip').forEach((tip) => {\n    const btn = tip.querySelector('.tooltip__trigger');\n    btn.addEventListener('click', () => {\n      tip.classList.remove('is-dismissed');\n      tip.classList.toggle('is-open');\n    });\n    tip.addEventListener('keydown', (e) => {\n      if (e.key === 'Escape') { tip.classList.remove('is-open'); tip.classList.add('is-dismissed'); }\n    });\n    tip.addEventListener('mouseleave', () => tip.classList.remove('is-dismissed'));\n    btn.addEventListener('blur', () => tip.classList.remove('is-open', 'is-dismissed'));\n  });\n</script>\n```\n\nComo funciona:\n- **Acessibilidade:** o ícone é um `<button>` que leva o foco com Tab. Leitores de tela leem o texto do tooltip por meio de `aria-describedby`, e o Esc fecha o tooltip.\n- **Mobile:** o tooltip abre e fecha com um toque, porque não existe hover no celular.\n\nVocê precisa preencher duas coisas:\n- **O valor da taxa:** deixei `R$ 0,00` porque não sei quanto vocês cobram.\n- **O texto da explicação:** é um exemplo. Ajuste à regra real, por exemplo se é grátis até X por mês ou se há horário limite."
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1321247,
+            "judgeCostUsd": 0.0014228999999999995,
+            "durationSeconds": 33,
+            "startedAt": "2026-11-09T15:50:35.407Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-pcnL6L/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: FAIL PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  true,
+                  true
+                ],
+                "evidence": "Não encontrei o design system aqui. A pasta de trabalho está vazia (só tem `.claude/`) e não há nenhum componente de tooltip, token ou documentação. O repositório `design-system-ai` existe na máquina, mas está fora do que esta sessão pode ler, então não consigo copiar a marcação real do componente.\n\nAbaixo está um tooltip em HTML/CSS puro, acessível. **Ele não segue o seu DS.** Use como ponto de partida e troque as classes e os tokens pelos do componente oficial:\n\n```html\n<div class=\"valor-ted\">\n  <span class=\"valor-ted__label\">Taxa TED</span>\n  <strong class=\"valor-ted__valor\">R$ 0,00</strong>\n\n  <span class=\"tooltip\">\n    <button\n      type=\"button\"\n      class=\"tooltip__trigger\"\n      aria-describedby=\"tooltip-taxa-ted\"\n      aria-label=\"Mais informações sobre a taxa da TED\"\n    >\n      <svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\">\n        <circle cx=\"8\" cy=\"8\" r=\"7\" stroke=\"currentColor\" stroke-width=\"1.5\"/>\n        <path d=\"M8 7v4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/>\n        <circle cx=\"8\" cy=\"4.75\" r=\"0.9\" fill=\"currentColor\"/>\n      </svg>\n    </button>\n\n    <span role=\"tooltip\" id=\"tooltip-taxa-ted\" class=\"tooltip__content\">\n      Essa taxa é cobrada a cada transferência via TED para outro banco.\n      Transferências entre contas do mesmo banco e via Pix não têm essa cobrança.\n    </span>\n  </span>\n</div>\n\n<style>\n  .valor-ted { display: inline-flex; align-items: center; gap: 8px; font-family: system-ui, sans-serif; }\n\n  .tooltip { position: relative; display: inline-flex; }\n\n  .tooltip__trigger {\n    display: inline-flex; padding: 2px; border: 0; border-radius: 50%;\n    background: none; color: #5c6670; cursor: pointer;\n  }\n  .tooltip__trigger:focus-visible { outline: 2px solid #1a66ff; outline-offset: 2px; }\n\n  .tooltip__content {\n    position: absolute; bottom: calc(100% + 8px); left: 50%;\n    transform: translateX(-50%);\n    width: max-content; max-width: 260px;\n    padding: 8px 12px; border-radius: 6px;\n    background: #1f2328; color: #fff;\n    font-size: 13px; line-height: 1.4;\n    opacity: 0; visibility: hidden; pointer-events: none;\n    transition: opacity .15s ease;\n    z-index: 10;\n  }\n  .tooltip__content::after {\n    content: \"\"; position: absolute; top: 100%; left: 50%;\n    transform: translateX(-50%);\n    border: 6px solid transparent; border-top-color: #1f2328;\n  }\n\n  .tooltip:hover .tooltip__content,\n  .tooltip__trigger:focus-visible + .tooltip__content {\n    opacity: 1; visibility: visible;\n  }\n</style>\n```\n\nSobre o que está no exemplo:\n- **Acessibilidade:** o ícone é um `<button>`, então dá para chegar nele pelo teclado. Ele usa `aria-label` e `aria-describedby`, e o balão tem `role=\"tooltip\"`.\n- **Texto:** o texto é provisório e a frase sobre o Pix é suposição minha. Confirme com produto as regras reais da taxa (valor, isenções, limite de gratuidade).\n- **Esc para fechar:** para seguir à risca a WCAG 1.4.13, o tooltip precisa fechar com Esc. Isso exige algumas linhas de JS.\n\nSe você colar aqui a marcação ou a documentação do tooltip do seu DS, ou abrir esta sessão com acesso ao repositório `design-system-ai`, eu adapto para os componentes e tokens oficiais."
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1261863,
+            "judgeCostUsd": 0.001285099999999999,
+            "durationSeconds": 31,
+            "startedAt": "2026-11-09T15:50:51.950Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-0oZkvt/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "aponta-gap",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL PASS FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  true,
+                  false
+                ],
+                "evidence": "Não achei o design system aqui. O diretório de trabalho só tem uma pasta `.claude` vazia, e não tem nenhum componente, token ou documentação de tooltip para eu seguir. Então não consigo te passar o markup oficial dele. Montei uma versão genérica e acessível que você pode adaptar às classes e tokens do seu DS:\n\n```html\n<div class=\"valor-ted\">\n  <span class=\"valor-ted__label\">Taxa TED</span>\n  <strong class=\"valor-ted__valor\">R$ 10,90</strong>\n\n  <span class=\"tooltip\">\n    <button\n      type=\"button\"\n      class=\"tooltip__trigger\"\n      aria-label=\"Saiba mais sobre a taxa da TED\"\n      aria-describedby=\"tooltip-taxa-ted\"\n    >\n      <svg aria-hidden=\"true\" focusable=\"false\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\">\n        <circle cx=\"8\" cy=\"8\" r=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/>\n        <rect x=\"7.25\" y=\"7\" width=\"1.5\" height=\"4.5\" rx=\".75\" fill=\"currentColor\"/>\n        <circle cx=\"8\" cy=\"4.75\" r=\".9\" fill=\"currentColor\"/>\n      </svg>\n    </button>\n\n    <span role=\"tooltip\" id=\"tooltip-taxa-ted\" class=\"tooltip__content\">\n      Cobramos essa taxa por TED enviada para outros bancos. Para não pagar nada, use o Pix.\n    </span>\n  </span>\n</div>\n\n<style>\n  .valor-ted { display: inline-flex; align-items: center; gap: var(--space-2, 8px); }\n\n  .tooltip { position: relative; display: inline-flex; }\n\n  .tooltip__trigger {\n    display: inline-flex; padding: 0; border: 0; background: none; cursor: pointer;\n    color: var(--color-icon-secondary, #5f6368); border-radius: 50%;\n  }\n  .tooltip__trigger:focus-visible { outline: 2px solid var(--color-focus, #1a73e8); outline-offset: 2px; }\n\n  .tooltip__content {\n    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);\n    width: max-content; max-width: 240px; padding: var(--space-2, 8px) var(--space-3, 12px);\n    background: var(--color-surface-inverse, #202124); color: var(--color-text-inverse, #fff);\n    font-size: var(--font-size-sm, 13px); line-height: 1.4; border-radius: var(--radius-sm, 6px);\n    opacity: 0; visibility: hidden; transition: opacity .15s; z-index: 10; pointer-events: none;\n  }\n  .tooltip__content::after {\n    content: \"\"; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);\n    border: 6px solid transparent; border-top-color: var(--color-surface-inverse, #202124);\n  }\n\n  .tooltip:hover .tooltip__content,\n  .tooltip:focus-within .tooltip__content { opacity: 1; visibility: visible; }\n</style>\n\n<script>\n  // Fecha com Esc (requisito WCAG 1.4.13)\n  document.addEventListener('keydown', (e) => {\n    if (e.key === 'Escape') document.activeElement?.closest('.tooltip')?.querySelector('.tooltip__trigger')?.blur();\n  });\n</script>\n```\n\n**Pontos de acessibilidade:**\n- O ícone é um `<button>`, então dá para chegar nele pelo teclado.\n- O texto fica ligado ao botão por `aria-describedby` e `role=\"tooltip\"`.\n- O tooltip aparece tanto no hover quanto no foco, e fecha com Esc.\n\n**O que você precisa ajustar:**\n- **Texto:** coloquei um valor e uma explicação de exemplo. Troque pelo valor real da taxa e pelo texto aprovado pelo time.\n- **Tokens:** os nomes das variáveis CSS (`--color-surface-inverse`, `--space-2` etc.) são exemplos com valores de fallback. Não são os tokens do seu DS.\n\nSe você me disser qual é o design system ou me passar o caminho do repositório dele, eu reescrevo usando o componente de tooltip e os tokens oficiais."
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.3333333333333333,
+        "passRateWithout": 0.3333333333333333,
+        "delta": 0.6666666666666667
+      }
+    },
+    {
+      "name": "icone-voltar",
+      "dir": "evals/icone-voltar",
+      "source": "prose",
+      "promptMarkdown": "Qual ícone do DS uso no botão de voltar do header? Só o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 10,
+      "graders": [
+        {
+          "name": "consultou-catalogo",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "find\\.ts|ds_find",
+            "flags": "",
+            "match": "contains",
+            "arm": "with-only"
+          }
+        },
+        {
+          "name": "icone-certo",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "ds-icon[^>]*name=\"arrow-left\"",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 10,
+            "costUsd": 0.1788896,
+            "judgeCostUsd": 0,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-09T15:50:57.100Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-0d9Ik9/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 12,
+            "costUsd": 0.1982006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 30,
+            "startedAt": "2026-11-09T15:50:57.750Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-yXsaA8/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1408052,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:51:08.044Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-W04tfH/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.1013228,
+            "judgeCostUsd": 0,
+            "durationSeconds": 13,
+            "startedAt": "2026-11-09T15:51:23.050Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-LwtPg2/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "icone-certo",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.09758739999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-11-09T15:51:26.659Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-817BwI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "icone-certo",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10064419999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-11-09T15:51:27.923Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Kb79p8/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "icone-certo",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 1
+      }
+    },
+    {
+      "name": "montar-tela-filtros",
+      "dir": "evals/montar-tela-filtros",
+      "source": "prose",
+      "promptMarkdown": "Cria em src/extrato-filtros.html a tela de filtro do extrato (período e tipo de lançamento) usando os web components do nosso design system.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "arquivo-criado",
+          "type": "file_exists",
+          "weight": 1,
+          "config": {
+            "path": "src/extrato-filtros.html",
+            "exists": true
+          }
+        },
+        {
+          "name": "sem-cor-crua",
+          "type": "regex",
+          "weight": 2,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "src/extrato-filtros.html"
+            },
+            "pattern": "#[0-9a-fA-F]{3,8}\\b|rgba?\\(",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "usa-template",
+          "type": "regex",
+          "weight": 2,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "src/extrato-filtros.html"
+            },
+            "pattern": "FilterSheetFlow|ds-filter-sheet",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 18,
+            "costUsd": 0.3947684,
+            "judgeCostUsd": 0,
+            "durationSeconds": 71,
+            "startedAt": "2026-11-09T15:51:30.605Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-vs34c7/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": true,
+                "weight": 2,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-template",
+                "passed": true,
+                "weight": 2,
+                "explanation": "matched FilterSheetFlow|ds-filter-sheet",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 18,
+            "costUsd": 0.3668302,
+            "judgeCostUsd": 0,
+            "durationSeconds": 72,
+            "startedAt": "2026-11-09T15:51:35.833Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-9lJ2Z2/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": true,
+                "weight": 2,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-template",
+                "passed": true,
+                "weight": 2,
+                "explanation": "matched FilterSheetFlow|ds-filter-sheet",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 19,
+            "costUsd": 0.3724948,
+            "judgeCostUsd": 0,
+            "durationSeconds": 89,
+            "startedAt": "2026-11-09T15:51:38.055Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-cyHPJw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": true,
+                "weight": 2,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "usa-template",
+                "passed": true,
+                "weight": 2,
+                "explanation": "matched FilterSheetFlow|ds-filter-sheet",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.12346460000000002,
+            "judgeCostUsd": 0,
+            "durationSeconds": 18,
+            "startedAt": "2026-11-09T15:51:39.140Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ESAyiZ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": false,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html missing (expected present)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.1185902,
+            "judgeCostUsd": 0,
+            "durationSeconds": 18,
+            "startedAt": "2026-11-09T15:51:57.631Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ioORTB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": false,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html missing (expected present)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 5,
+            "costUsd": 0.131496,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:52:15.249Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-3U2CaO/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": false,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html missing (expected present)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 1
+      }
+    },
+    {
+      "name": "nao-dispara-css-grid",
+      "dir": "evals/nao-dispara-css-grid",
+      "source": "prose",
+      "promptMarkdown": "Qual a diferença entre repeat(auto-fit, ...) e repeat(auto-fill, ...) no CSS grid? Responde em 3 frases.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0850094,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-09T15:52:38.224Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-sjPhlN/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0849654,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:52:41.750Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-DTw9H4/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0855894,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-11-09T15:52:45.036Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-j7xkwN/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0789414,
+            "judgeCostUsd": 0,
+            "durationSeconds": 5,
+            "startedAt": "2026-11-09T15:52:47.687Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-pQYrdB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0788974,
+            "judgeCostUsd": 0,
+            "durationSeconds": 5,
+            "startedAt": "2026-11-09T15:52:47.886Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-u3Z5KC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0777094,
+            "judgeCostUsd": 0,
+            "durationSeconds": 4,
+            "startedAt": "2026-11-09T15:52:52.926Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-jgvlei/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "nao-dispara-fora-de-ui",
+      "dir": "evals/nao-dispara-fora-de-ui",
+      "source": "prose",
+      "promptMarkdown": "Explica em 3 frases a diferença entre o teorema CAP e o PACELC.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0859454,
+            "judgeCostUsd": 0,
+            "durationSeconds": 8,
+            "startedAt": "2026-11-09T15:52:53.149Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-baEucJ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0857014,
+            "judgeCostUsd": 0,
+            "durationSeconds": 8,
+            "startedAt": "2026-11-09T15:52:53.563Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-GOzIrV/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.08504139999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-09T15:52:56.651Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-dIwsaH/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.07957739999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 5,
+            "startedAt": "2026-11-09T15:53:00.976Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-veIzvc/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0788454,
+            "judgeCostUsd": 0,
+            "durationSeconds": 4,
+            "startedAt": "2026-11-09T15:53:01.423Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Kwunb3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0799454,
+            "judgeCostUsd": 0,
+            "durationSeconds": 5,
+            "startedAt": "2026-11-09T15:53:03.317Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-q0f0kX/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "nao-dispara-outro-ds",
+      "dir": "evals/nao-dispara-outro-ds",
+      "source": "prose",
+      "promptMarkdown": "No Material UI v6, como troco a cor primária do tema? Só o trecho de código.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0842734,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-09T15:53:05.390Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-wOGtdt/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0844174,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:05.727Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-DkS5a3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0847174,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:06.901Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-6xNuWd/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0777534,
+            "judgeCostUsd": 0,
+            "durationSeconds": 4,
+            "startedAt": "2026-11-09T15:53:08.313Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-jeMOFd/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.083369,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:11.900Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-oaGFLB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.0828242,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:12.099Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-p7h1IK/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "nao-dispara-stencil-config",
+      "dir": "evals/nao-dispara-stencil-config",
+      "source": "prose",
+      "promptMarkdown": "Como configuro o output target dist-custom-elements no stencil.config.ts de uma lib nova? Só a config.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0940294,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-11-09T15:53:12.186Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-e9RPOY/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0928094,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-11-09T15:53:12.871Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-rhNfcM/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.09362140000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-11-09T15:53:17.811Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-4S3YRv/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0838174,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:18.063Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-XnRXmr/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.08834539999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-11-09T15:53:22.169Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-FGZsq7/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0839774,
+            "judgeCostUsd": 0,
+            "durationSeconds": 6,
+            "startedAt": "2026-11-09T15:53:23.014Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-fNlalk/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "nao-dispara-teste-unitario",
+      "dir": "evals/nao-dispara-teste-unitario",
+      "source": "prose",
+      "promptMarkdown": "Escreve um teste unitário com node:test para uma função formatCurrency(valor) que formata BRL.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.185671,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-09T15:53:24.383Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-xtp6RR/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.1594258,
+            "judgeCostUsd": 0,
+            "durationSeconds": 29,
+            "startedAt": "2026-11-09T15:53:27.705Z",
+            "error": "exit 1: Reached maximum number of turns (5)",
+            "tracePath": "/private/tmp/e-9K0imB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.16121519999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 28,
+            "startedAt": "2026-11-09T15:53:29.293Z",
+            "error": "exit 1: Reached maximum number of turns (5)",
+            "tracePath": "/private/tmp/e-D0AfBB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.16044339999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 27,
+            "startedAt": "2026-11-09T15:53:31.200Z",
+            "error": "exit 1: Reached maximum number of turns (5)",
+            "tracePath": "/private/tmp/e-lfD4pa/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.14788880000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T15:53:56.881Z",
+            "error": "exit 1: Reached maximum number of turns (5)",
+            "tracePath": "/private/tmp/e-ULkRwJ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1559676,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-09T15:53:56.977Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-YbFeU9/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 13,
+    "casesPassed": 13,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.5
+  }
+}

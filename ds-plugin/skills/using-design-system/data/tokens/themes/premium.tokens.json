@@ -1,0 +1,56 @@
+{
+  "$description": "Tema premium: superfícies escuras, ação dourada. Só overrides + tokens exclusivos.",
+  "color": {
+    "action": {
+      "primary": {
+        "$type": "color",
+        "$value": "{palette.gold.500}"
+      },
+      "primary-hover": {
+        "$type": "color",
+        "$value": "{palette.gold.600}"
+      }
+    },
+    "text": {
+      "default": {
+        "$type": "color",
+        "$value": "{palette.neutral.0}"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7216,
+            0.7373,
+            0.7765
+          ],
+          "hex": "#b8bcc6"
+        }
+      },
+      "on-action": {
+        "$type": "color",
+        "$value": "{palette.neutral.900}"
+      }
+    },
+    "surface": {
+      "default": {
+        "$type": "color",
+        "$value": "{palette.neutral.900}"
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{palette.neutral.950}"
+      }
+    }
+  },
+  "component": {
+    "chip-premium": {
+      "background": {
+        "$type": "color",
+        "$value": "{palette.neutral.950}",
+        "$description": "Fundo do chip premium (existe só neste tema)"
+      }
+    }
+  }
+}

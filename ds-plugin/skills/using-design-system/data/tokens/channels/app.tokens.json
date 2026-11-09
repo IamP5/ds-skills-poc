@@ -1,0 +1,12 @@
+{
+  "$description": "Canal app: alvos de toque maiores.",
+  "size": {
+    "control": {
+      "min-height": {
+        "$type": "dimension",
+        "$value": "{size.48}",
+        "$description": "Altura mínima de controles"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "design-system",
+  "displayName": "Design System",
+  "version": "0.3.0",
+  "description": "Ensina o agente o que o DS sabe: componentes (CEM + CRD), templates, services, tokens DTCG por tema e canal, e assets. Inclui MCP do DS, validador em hook (PostToolUse + Stop), reviewer e evals.",
+  "author": { "name": "Time de Design System" },
+  "keywords": ["design-system", "tokens", "dtcg", "stencil", "web-components", "custom-elements-manifest"]
+}

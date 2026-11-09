@@ -1,0 +1,841 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.316",
+  "startedAt": "2026-11-09T15:11:42.294Z",
+  "durationSeconds": 105,
+  "costUsd": 2.4570442999999997,
+  "partial": false,
+  "suite": {
+    "root": "/Users/tuba/Dev/design-system-ai/ds-plugin",
+    "ablation": "none",
+    "threshold": 1,
+    "concurrency": 4,
+    "plugins": [
+      {
+        "name": "design-system",
+        "version": "0.2.0",
+        "path": "/Users/tuba/Dev/design-system-ai/ds-plugin"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "chip-premium-no-pj",
+      "dir": "evals/chip-premium-no-pj",
+      "source": "prose",
+      "promptMarkdown": "No app PJ (tema pj) quero destacar um benefício exclusivo com o ds-chip-premium. Me dá o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 15,
+      "graders": [
+        {
+          "name": "sem-branch-de-tema",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "(?<!`if \\()(?<!`)\\btheme\\s*===?\\s*['\"]",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "usa-alternativa",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "ds-chip[^>]*variant=\"highlight\"",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1549418,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-09T15:11:42.338Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-MQNES0/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.1514358,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-09T15:11:42.338Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-Psj0ka/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.15425719999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 26,
+            "startedAt": "2026-11-09T15:11:42.338Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-I5GT2y/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "sem-branch-de-tema",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-alternativa",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-chip[^>]*variant=\"highlight\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "dialogo-depreciado",
+      "dir": "evals/dialogo-depreciado",
+      "source": "prose",
+      "promptMarkdown": "Preciso de um diálogo de confirmação pra excluir favorecido. Posso usar o ds-old-dialog que já tá no projeto? Me passa o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 15,
+      "graders": [
+        {
+          "name": "criterio",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "PASS se a resposta diz que ds-old-dialog está depreciado e entrega um exemplo com ds-modal, com a ação de excluir usando um botão de variante destrutiva (danger).\nFAIL se recomenda ds-old-dialog, se não menciona a depreciação, ou se não há exemplo com ds-modal.",
+          "config": {
+            "criteria": "PASS se a resposta diz que ds-old-dialog está depreciado e entrega um exemplo com ds-modal, com a ação de excluir usando um botão de variante destrutiva (danger).\nFAIL se recomenda ds-old-dialog, se não menciona a depreciação, ou se não há exemplo com ds-modal.",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "nao-usa-depreciado",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "<ds-old-dialog",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "sugere-modal",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "<ds-modal",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.18520570000000003,
+            "judgeCostUsd": 0.0003671,
+            "durationSeconds": 27,
+            "startedAt": "2026-11-09T15:11:42.338Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-vwuawt/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não dá pra usar o `ds-old-dialog`: ele está **deprecated** no DS e foi substituído pelo **`ds-modal`** (status `built`). Segue o HTML com `ds-modal`:\n\n```html\n<ds-modal heading=\"Excluir favorecido?\" open={confirming} onDsClose={cancel}>\n  <p>Essa ação não pode ser desfeita.</p>\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" onDsClick={cancel}>Cancelar</ds-button>\n    <ds-button variant=\"danger\" loading={removing} onDsClick={remove}>Excluir</ds-button>\n  </div>\n</ds-modal>\n```\n\nAs regras do DS que esse HTML segue:\n- **Título em forma de pergunta** (\"Excluir favorecido?\"), que é o padrão pra confirmar uma ação destrutiva.\n- **Ações no slot `footer`**: um botão `danger` pra confirmar e um `ghost` pra cancelar. O `danger` sempre precisa de uma confirmação como essa.\n- **`loading` no botão Excluir** evita clique duplo enquanto a exclusão está rodando, e o foco continua no botão.\n- **O modal já cuida do foco, da tecla Esc e do scroll**: prende o foco dentro dele, fecha com `Esc` e devolve o foco a quem abriu. Ele trava o scroll da página sozinho, então **não** use `document.body.style.overflow`.\n\nDois pontos de atenção:\n- **Nome do evento do botão:** pela API do `ds-button`, o evento é `dsClick`, mas o exemplo na doc do `ds-modal` usa `onClick`. Usei `onDsClick`. Se o seu projeto usa `onClick` no `ds-button` e funciona, pode manter, mas vale avisar o time do DS dessa diferença entre as duas docs.\n- **Se essa confirmação abrir por cima de outro overlay** (por exemplo, um bottom sheet com os detalhes do favorecido), não coloque um `ds-modal` direto. Abra pelo template `OverlayStack`:\n  ```ts\n  await overlayStack.push('ds-modal', { heading: 'Excluir favorecido?' });\n  ```\n  E feche com `overlayStack.pop()`, não com `el.remove()`. O `el.remove()` deixa o scroll da página travado."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.18378139999999998,
+            "judgeCostUsd": 0.00029640000000000005,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:12:03.507Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-mBGVMj/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**Não use o `ds-old-dialog`.** No catálogo do DS ele está como `deprecated`, e o substituto indicado é o **`ds-modal`** (`built`). A própria documentação do `ds-modal` traz a confirmação de \"Excluir favorecido\" como exemplo de uso:\n\n```html\n<ds-modal\n  heading=\"Excluir favorecido?\"\n  open={confirming}\n  onDsClose={cancel}\n>\n  <p>Essa ação não pode ser desfeita.</p>\n\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" onDsClick={cancel}>Cancelar</ds-button>\n    <ds-button variant=\"danger\" loading={removing} onDsClick={remove}>Excluir</ds-button>\n  </div>\n</ds-modal>\n```\n\n**Regras do DS que esse HTML segue:**\n- **Título como pergunta:** em ação destrutiva, o `heading` precisa ser uma pergunta (\"Excluir favorecido?\").\n- **Botões no rodapé:** as ações ficam no slot `footer`, com `danger` para excluir e `ghost` para cancelar. O `danger` sempre exige confirmação, e este modal é essa confirmação.\n- **Scroll:** não trave o scroll da página com `document.body.style.overflow`. O `ds-modal` já faz isso internamente.\n- **Teclado e foco:** o foco fica preso dentro do modal, o `Esc` fecha e o foco volta para o botão que abriu. O componente já faz tudo isso.\n- **Mais de um overlay:** se o modal abrir por cima de uma bottom sheet ou de outro overlay, abra pelo template `OverlayStack`.\n\n**Dois detalhes:**\n- Usei `onDsClick` em vez do `onClick` do exemplo da documentação. O evento `dsClick` não dispara quando o botão está em `loading` ou `disabled`, então impede que alguém exclua duas vezes durante a requisição.\n- Se você tem código antigo com `ds-old-dialog`, a troca é: `title` → `heading`, `show()` → `open = true` e evento `closed` → `dsClose`."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.18590980000000004,
+            "judgeCostUsd": 0.00029640000000000005,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T15:12:08.327Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ttEyKM/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "criterio",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Não use o `ds-old-dialog`. Ele está **deprecated** no Design System e foi substituído pelo **`ds-modal`**, que está `built` e já cobre exatamente esse caso de confirmação destrutiva.\n\n```html\n<ds-modal heading=\"Excluir favorecido?\" open={confirming} onDsClose={cancel}>\n  <p>Essa ação não pode ser desfeita.</p>\n  <div slot=\"footer\">\n    <ds-button variant=\"ghost\" onDsClick={cancel}>Cancelar</ds-button>\n    <ds-button variant=\"danger\" loading={removing} onDsClick={remove}>Excluir</ds-button>\n  </div>\n</ds-modal>\n```\n\nO que o DS exige nesse caso:\n- **Título em forma de pergunta** (\"Excluir favorecido?\").\n- **Ações no slot `footer`:** um `danger` para excluir e um `ghost` para cancelar. Não use `primary` aqui.\n- **`onDsClose`** dispara quando o usuário fecha pelo `Esc` ou pelo próprio modal. Ligue no mesmo `cancel`.\n- **`loading` no botão Excluir** evita clique duplo enquanto a exclusão roda e mantém o foco no botão.\n- **Não trave o scroll nem gerencie o foco por fora.** O `ds-modal` já usa o `BodyScrollManager`, prende o foco dentro dele e devolve o foco a quem o abriu.\n- **Se abrir de dentro de outro overlay** (por exemplo, de um bottom sheet com os detalhes do favorecido), use o `OverlayStack` em vez do modal direto:\n  ```ts\n  await overlayStack.push('ds-modal', { heading: 'Excluir favorecido?' });\n  ```\n\nAchei uma inconsistência na documentação: o exemplo do `ds-modal` usa `onClick` nos botões, mas a API gerada do `ds-button` declara o evento `dsClick`, que não dispara em `loading`/`disabled`. Por isso usei `onDsClick`. Vale confirmar com o time do DS qual é o certo e corrigir o doc."
+              },
+              {
+                "name": "nao-usa-depreciado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sugere-modal",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched <ds-modal",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "icone-voltar",
+      "dir": "evals/icone-voltar",
+      "source": "prose",
+      "promptMarkdown": "Qual ícone do DS uso no botão de voltar do header? Só o HTML.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 10,
+      "graders": [
+        {
+          "name": "consultou-catalogo",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "find\\.ts|ds_find",
+            "flags": "",
+            "match": "contains",
+            "arm": "with-only"
+          }
+        },
+        {
+          "name": "icone-certo",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "ds-icon[^>]*name=\"arrow-left\"",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.140107,
+            "judgeCostUsd": 0,
+            "durationSeconds": 17,
+            "startedAt": "2026-11-09T15:12:08.715Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-9w8PxX/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.104406,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-11-09T15:12:09.706Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-c4xVU5/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.1080772,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-11-09T15:12:19.733Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-p0J4SG/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "consultou-catalogo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched find\\.ts|ds_find",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "icone-certo",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ds-icon[^>]*name=\"arrow-left\"",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "montar-tela-filtros",
+      "dir": "evals/montar-tela-filtros",
+      "source": "prose",
+      "promptMarkdown": "Cria em src/extrato-filtros.html a tela de filtro do extrato (período e tipo de lançamento) usando os web components do nosso design system.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 25,
+      "graders": [
+        {
+          "name": "arquivo-criado",
+          "type": "file_exists",
+          "weight": 1,
+          "config": {
+            "path": "src/extrato-filtros.html",
+            "exists": true
+          }
+        },
+        {
+          "name": "sem-cor-crua",
+          "type": "regex",
+          "weight": 2,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "src/extrato-filtros.html"
+            },
+            "pattern": "#[0-9a-fA-F]{3,8}\\b|rgba?\\(",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\""
+          }
+        },
+        {
+          "name": "usa-template",
+          "type": "regex",
+          "weight": 2,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "src/extrato-filtros.html"
+            },
+            "pattern": "FilterSheetFlow|ds-filter-sheet",
+            "flags": "",
+            "match": "contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.16666666666666666,
+            "passed": false,
+            "turns": 14,
+            "costUsd": 0.2387544,
+            "judgeCostUsd": 0,
+            "durationSeconds": 40,
+            "startedAt": "2026-11-09T15:12:25.879Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-ujp6Y8/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": false,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html missing (expected present)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": false,
+                "weight": 2,
+                "explanation": "grader threw: case \"montar-tela-filtros\" grader focus file \"src/extrato-filtros.html\": path \"src/extrato-filtros.html\" does not exist",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 16,
+            "costUsd": 0.2848756,
+            "judgeCostUsd": 0,
+            "durationSeconds": 51,
+            "startedAt": "2026-11-09T15:12:28.809Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-TSM0zu/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": true,
+                "weight": 2,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": true,
+                "weight": 2,
+                "explanation": "matched FilterSheetFlow|ds-filter-sheet",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 15,
+            "costUsd": 0.30866419999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 57,
+            "startedAt": "2026-11-09T15:12:30.828Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-DhmOEB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "arquivo-criado",
+                "passed": true,
+                "weight": 1,
+                "explanation": "src/extrato-filtros.html exists as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "sem-cor-crua",
+                "passed": true,
+                "weight": 2,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "usa-template",
+                "passed": true,
+                "weight": 2,
+                "explanation": "matched FilterSheetFlow|ds-filter-sheet",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.7222222222222223,
+        "passRate": 0.6666666666666666
+      }
+    },
+    {
+      "name": "nao-dispara-fora-de-ui",
+      "dir": "evals/nao-dispara-fora-de-ui",
+      "source": "prose",
+      "promptMarkdown": "Explica em 3 frases a diferença entre o teorema CAP e o PACELC.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 300,
+      "maxTurns": 5,
+      "graders": [
+        {
+          "name": "skill-nao-disparou",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?using-design-system\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0869374,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-09T15:12:33.159Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-DTz8Xb/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0854494,
+            "judgeCostUsd": 0,
+            "durationSeconds": 8,
+            "startedAt": "2026-11-09T15:12:40.480Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-VKgvqz/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0842414,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-09T15:12:48.315Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-qjma77/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-nao-disparou",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 5,
+    "casesPassed": 4,
+    "overallScore": 0.9444444444444444,
+    "overallPassRate": 0.9333333333333332
+  }
+}

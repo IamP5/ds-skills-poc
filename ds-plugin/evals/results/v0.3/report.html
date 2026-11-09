@@ -1,0 +1,3049 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eval report — design-system v0.3.0</title>
+</head>
+<body>
+<style>
+:root{--plane:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#6b6a64;--hairline:rgba(11,11,11,.10);--grid:#e1e0d9;--inset:rgba(11,11,11,.04);--accent:#2a78d6;--base-fill:#6b6a64;--delta-good:#006300;--good:#067d06;--warning:#8a6100;--critical:#d03b3b;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){:root{--plane:#0d0d0d;--surface:#1a1a19;--ink:#ffffff;--ink-2:#c3c2b7;--ink-3:#898781;--hairline:rgba(255,255,255,.10);--grid:#2c2c2a;--inset:rgba(255,255,255,.05);--accent:#3987e5;--base-fill:#898781;--delta-good:#0ca30c;--good:#0ca30c;--warning:#fab219;--critical:#e06c6c;color-scheme:dark}}
+:root[data-theme="dark"]{--plane:#0d0d0d;--surface:#1a1a19;--ink:#ffffff;--ink-2:#c3c2b7;--ink-3:#898781;--hairline:rgba(255,255,255,.10);--grid:#2c2c2a;--inset:rgba(255,255,255,.05);--accent:#3987e5;--base-fill:#898781;--delta-good:#0ca30c;--good:#0ca30c;--warning:#fab219;--critical:#e06c6c;color-scheme:dark}
+:root[data-theme="light"]{--plane:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#6b6a64;--hairline:rgba(11,11,11,.10);--grid:#e1e0d9;--inset:rgba(11,11,11,.04);--accent:#2a78d6;--base-fill:#6b6a64;--delta-good:#006300;--good:#067d06;--warning:#8a6100;--critical:#d03b3b;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--plane);color:var(--ink);
+  font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:880px;margin:0 auto;padding:40px 24px 64px;display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+header h1{margin:2px 0 0;font-size:24px;font-weight:600;line-height:1.25;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;color:var(--ink-2);font-size:13px}
+.meta .num{font-variant-numeric:tabular-nums lining-nums}
+.banner{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;
+  border:1px solid var(--hairline);background:var(--surface);font-size:13px}
+.banner .chip-warn{color:var(--warning);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:14px 16px;
+  display:flex;flex-direction:column;gap:4px}
+.tile .label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.tile .value{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums lining-nums;line-height:1.1}
+.tile.hero .value{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:48px}
+.tile .sub{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tile .value.delta-pos{color:var(--delta-good)}
+.tile .value.delta-neg{color:var(--critical)}
+.toolbar{display:flex;gap:8px;justify-content:flex-end}
+.toolbar button{font:12px system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--hairline);border-radius:6px;padding:4px 10px;cursor:pointer}
+.toolbar button:hover{color:var(--ink)}
+.toolbar button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.case{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:18px 20px;
+  display:flex;flex-direction:column;gap:10px}
+.case-regressed{border-left:3px solid var(--critical)}
+.verdict{margin:6px 0 0;font-size:15px}
+.verdict .delta{font-size:15px}
+.flag{font-size:11px;font-weight:600;color:var(--warning);white-space:nowrap}
+.star{color:var(--warning);font-size:.45em;vertical-align:super;line-height:0;cursor:help}
+.legend summary{cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+.legend-list{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--ink-2)}
+.case-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.case-head h2{margin:0;font-size:16px;font-weight:600}
+.case-head .spacer{flex:1}
+.case-score{font-size:15px;font-weight:600}
+.mono{font:12px "SF Mono",ui-monospace,Menlo,Consolas,monospace}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.muted{color:var(--ink-3);font-size:12px}
+.meter{display:inline-block;position:relative;width:120px;height:6px;border-radius:4px;background:var(--grid);
+  vertical-align:middle}
+.meter>span{display:block;height:100%;border-radius:4px;max-width:100%}
+.meter .tick{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink-3);border-radius:1px}
+.m-accent>span{background:var(--accent)}
+.m-base>span{background:var(--base-fill)}
+.delta{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.delta-pos{color:var(--delta-good)}
+.delta-neg{color:var(--critical)}
+.delta-zero{color:var(--ink-3)}
+details.section{border-top:1px solid var(--grid);padding-top:10px}
+details.section>summary{cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-2);list-style-position:outside;margin-left:2px}
+details.section>summary:hover{color:var(--ink)}
+details.section[open]>summary{margin-bottom:8px}
+.md{display:flex;flex-direction:column;gap:8px;background:var(--inset);border-radius:8px;
+  padding:12px 14px;overflow-wrap:break-word}
+.md>:first-child{margin-top:0}
+.md h1,.md h2,.md h3,.md h4,.md h5,.md h6{margin:4px 0 0;font-size:1em;font-weight:600;line-height:1.3}
+.md p,.md ul,.md ol,.md blockquote,.md table,.md pre,.md hr{margin:0}
+.md ul,.md ol{display:flex;flex-direction:column;gap:4px;padding-left:20px}
+.md blockquote{border-left:2px solid var(--hairline);padding-left:10px;color:var(--ink-2)}
+.md :not(pre)>code{background:var(--inset);padding:1px 4px;border-radius:4px;
+  font:.92em "SF Mono",ui-monospace,Menlo,Consolas,monospace}
+.md pre{background:var(--inset);border:1px solid var(--hairline);padding:10px 12px;border-radius:6px;
+  overflow-x:auto;font:12px/1.5 "SF Mono",ui-monospace,Menlo,Consolas,monospace}
+.md pre code{background:none;padding:0;font:inherit}
+.md table{width:100%;border-collapse:collapse}
+.md th,.md td{padding:5px 8px;text-align:left;vertical-align:top;border-bottom:1px solid var(--grid)}
+.md th{font-weight:600;color:var(--ink-2)}
+.md a{color:var(--accent);text-decoration:none}
+.md a:hover{text-decoration:underline}
+.grader-def{display:flex;flex-direction:column;gap:6px;padding:8px 0}
+.grader-def+.grader-def{border-top:1px solid var(--grid)}
+.grader-def-head{display:flex;align-items:baseline;gap:8px}
+.grader-name{font:13px "SF Mono",ui-monospace,Menlo,Consolas,monospace;font-weight:600}
+.badge{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);
+  border:1px solid var(--hairline);border-radius:999px;padding:1px 8px}
+.config{display:flex;flex-direction:column;gap:2px;background:var(--inset);border-radius:8px;padding:10px 14px}
+.config code{font:12px "SF Mono",ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere}
+.arm{display:flex;flex-direction:column;gap:8px;padding:6px 0}
+.arm+.arm{border-top:1px dashed var(--grid);margin-top:4px;padding-top:12px}
+.arm-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.arm-label{font-size:13px;font-weight:600}
+.run{border:1px solid var(--grid);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.run-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.run-title{font-size:12px;font-weight:600;color:var(--ink-2)}
+.run-error .explanation{color:var(--ink-2)}
+.note{font-size:12px;color:var(--ink-2)}
+.graders{display:flex;flex-direction:column;gap:4px}
+details.grader{border-radius:6px}
+details.grader>summary{cursor:pointer;display:flex;align-items:baseline;gap:8px;padding:3px 4px;
+  border-radius:6px;list-style:none}
+details.grader>summary::-webkit-details-marker{display:none}
+details.grader>summary::before{content:'▸';font-size:10px;color:var(--ink-3);flex:none;
+  transition:transform .12s ease}
+details.grader[open]>summary::before{transform:rotate(90deg)}
+details.grader>summary:hover{background:var(--inset)}
+details.grader>summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.grader-body{padding:6px 8px 8px 24px;display:flex;flex-direction:column;gap:6px}
+.chip{font-size:11px;font-weight:600;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.chip-pass{color:var(--good);border:1px solid currentColor}
+.chip-fail{color:var(--critical);border:1px solid currentColor}
+.chip.chip-warn{color:var(--warning);border:1px solid currentColor}
+.explanation{margin:0;font-size:13px;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:break-word}
+.kv{display:flex;gap:8px;font-size:12px;color:var(--ink-3)}
+.votes{font-variant-numeric:tabular-nums;letter-spacing:.1em}
+pre.evidence{margin:0;background:var(--inset);border:1px solid var(--hairline);border-radius:6px;
+  padding:8px 10px;overflow-x:auto;max-height:320px;
+  font:12px/1.5 "SF Mono",ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:break-word}
+footer{color:var(--ink-3);font-size:12px;text-align:center;padding-top:8px}
+@media (prefers-reduced-motion:no-preference){
+  details.grader>summary,.toolbar button{transition:background .12s ease,color .12s ease}
+}
+@media (prefers-reduced-motion:reduce){
+  details.grader>summary::before{transition:none}
+}
+@media print{
+  :root,:root[data-theme="dark"],:root[data-theme="light"]{--plane:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#6b6a64;--hairline:rgba(11,11,11,.10);--grid:#e1e0d9;--inset:rgba(11,11,11,.04);--accent:#2a78d6;--base-fill:#6b6a64;--delta-good:#006300;--good:#067d06;--warning:#8a6100;--critical:#d03b3b;color-scheme:light}
+  body{background:#fff}
+  .toolbar{display:none}
+  .case,.run,.grader-def{break-inside:avoid}
+  pre.evidence{max-height:none}
+}
+</style>
+<div class="wrap">
+<header>
+<div class="eyebrow">Plugin eval report</div>
+<h1>design-system v0.3.0</h1>
+<p class="verdict">Plugin effect: <span class="delta delta-pos">↑ +39.7 pts</span> vs baseline — improved 8 · flat 5 · regressed 0 of 13 cases.</p>
+<div class="meta">
+<span class="mono">.</span>
+<span>Claude Code v2.1.316</span>
+<span class="num">2026-11-09 15:36 UTC</span>
+<span class="num">6m 41s</span>
+<span class="num">$10.36</span>
+<span class="num">78 runs</span>
+<span class="num">4 in flight</span>
+
+
+<span>judge default</span>
+<span class="num">threshold 100%</span>
+
+</div>
+</header>
+<div class="banner"><span class="chip-warn">⚠ Averages include non-judgments</span><span>2 runs errored — their scores count toward the averages shown without a complete judgment.</span></div>
+<section class="tiles">
+<div class="tile hero"><span class="label">Suite score · with plugin</span><span class="value">92.3%</span><span class="sub">mean of per-case scores</span></div>
+<div class="tile"><span class="label">Ablation Δ</span><span class="value num delta-pos">↑ +39.7</span><span class="sub">score points vs baseline, 13 of 13 cases</span></div>
+<div class="tile"><span class="label">Baseline score</span><span class="value num">52.6%</span><span class="sub">without the plugin</span></div>
+<div class="tile"><span class="label">Cases</span><span class="value num">13</span><span class="sub">11 of 13 ≥ 100% threshold</span></div>
+<div class="tile"><span class="label">Perfect runs</span><span class="value num">89.7%</span><span class="sub">runs where every grader passed</span></div>
+</section>
+<details class="section legend">
+<summary>How to read this report</summary>
+<ul class="legend-list">
+<li>A run's score is the weighted fraction of its graders that passed; a "perfect" run passed every grader.</li>
+<li>A case's score is the mean of its runs; a case passes when its score is at or above the 100% threshold (the tick on each case bar).</li>
+<li>The suite score is the mean of the per-case scores.</li>
+<li>Judge votes are independent samples of the LLM judge; the majority decides pass or fail.</li>
+<li>"With plugin" and "Baseline" runs are identical except for the plugin being loaded; Δ is the with-plugin score minus the baseline score.</li>
+
+</ul>
+</details>
+<div class="toolbar"><button type="button" data-act="expand">Expand all</button><button type="button" data-act="collapse">Collapse all</button></div>
+<article class="case" id="case-1">
+<div class="case-head">
+<h2>chip-premium-no-pj</h2>
+<span class="muted mono">evals/chip-premium-no-pj</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +16.7 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:66.7%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">66.7%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:66.7%"></span></span>
+<span class="num">66.7%</span>
+<span class="muted num">33.3% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">10 turns · $0.18 · 15:36:40 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched ds-chip[^&gt;]*variant=&quot;highlight&quot;</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">8 turns · $0.16 · 15:36:40 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">8 turns · $0.16 · 15:36:40 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">0% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">3 turns · $0.11 · 15:36:40 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">4 turns · $0.12 · 15:36:57 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:50.0%"></span></span>
+<span class="num">50%</span>
+<span class="muted num">3 turns · $0.11 · 15:37:05 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-branch-de-tema</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-alternativa</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>No app PJ (tema pj) quero destacar um benefício exclusivo com o ds-chip-premium. Me dá o HTML.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">sem-branch-de-tema</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;(?&lt;!`if \\()(?&lt;!`)\\btheme\\s*===?\\s*[&apos;\&quot;]&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;not_contains&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">usa-alternativa</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;ds-chip[^&gt;]*variant=\&quot;highlight\&quot;&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-2">
+<div class="case-head">
+<h2>decisao-aberta-chip</h2>
+<span class="muted mono">evals/decisao-aberta-chip</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +66.7 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.17 · 15:37:07 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não posso te passar esse HTML como pronto. As duas coisas que você pediu dependem de uma decisão que o time de DS ainda não tomou.
+
+O doc do `ds-chip-premium` (que está `built`) tem o requisito **C1 em aberto**: *&quot;Limite de texto do `rotulo` e uso sem `icone` ainda não definidos.&quot;*
+
+- **Texto longo:** &quot;Cashback dobrado em todas as compras do mês inteiro&quot; tem uns 50 caracteres. Não existe limite definido, então ninguém sabe ainda se o chip quebra linha, corta com reticências ou se esse texto é grande demais para um chip.
+- **Sem ícone:** pela API o slot `icon` é opcional, mas a C1 diz justamente que o uso sem ícone ainda não foi definido.
+
+Na API, o markup seria este. Passou no `ds_validate` com tema premium e canal app:
+
+```html
+&lt;ds-chip-premium label=&quot;Cashback dobrado em todas as compras do mês inteiro&quot;&gt;&lt;/ds-chip-premium&gt;
+```
+
+O validador só confere se a tag e os atributos existem. Ele não sabe que a C1 está em aberto. Então não coloque isso em produção até o time decidir a C1.
+
+**Próximos passos:**
+1. Leve a C1 para o time de DS e pergunte qual é o limite do `label` e se o chip pode ser usado sem ícone.
+2. Se der para mexer no conteúdo, um texto mais curto (tipo &quot;Cashback em dobro&quot;) e com ícone fica mais perto do uso que já está claro. Mesmo assim, o limite exato continua dependendo da C1.
+
+O componente também tem uma referência quebrada no doc (`dangling-ref`), o que mostra que ele ainda não está completo.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">6 turns · $0.16 · 15:37:09 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Ainda não te passo esse HTML como pronto. Os dois pontos do seu pedido caem numa decisão que o Design System deixou em aberto.
+
+O `ds-chip-premium` está `built` e só existe no tema `premium`, então é o componente certo para esse caso. O problema é o requisito de conteúdo dele:
+
+&gt; **C1 [open]**: limite de texto do `rotulo` e uso sem `icone` ainda não definidos.
+
+- **Texto longo:** &quot;Cashback dobrado em todas as compras do mês inteiro&quot; tem 51 caracteres. Não há limite definido, então não dá para saber se isso cabe no chip, se ele quebra linha ou se corta o texto.
+- **Sem ícone:** pela API o slot `icon` é opcional, mas o C1 diz que usar o chip sem ícone também não foi definido.
+
+Se eu entregasse o código, estaria escolhendo pelo time de DS as duas coisas que o C1 deixa em aberto.
+
+**Próximos passos:**
+1. Leve o **C1 do `ds-chip-premium`** ao time de DS e peça duas definições: o limite de caracteres do `label` e se o chip pode ser usado sem `icon`.
+2. Enquanto isso, um texto mais curto, como &quot;Cashback em dobro no mês&quot;, reduz o risco. Mesmo assim, a pendência do limite e do ícone continua.
+
+Quando o C1 for decidido, eu gero o HTML e passo no `ds_validate` com `theme=premium` e `channel=app`.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">6 turns · $0.15 · 15:37:16 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Ainda não te passo esse HTML como definitivo: o seu pedido depende justamente de uma regra que o time ainda não definiu.
+
+O `ds-chip-premium` é um componente pronto para uso. Mas o requisito **C1**, que diz qual o tamanho máximo do texto e se o chip pode ficar **sem ícone**, está **[open]**. Seu caso usa as duas coisas:
+
+- **Sem ícone:** não está definido se pode.
+- **Texto longo:** &quot;Cashback dobrado em todas as compras do mês inteiro&quot; tem 51 caracteres. Não existe limite definido, então não dá para saber se cabe, se quebra linha ou se corta.
+
+Essa decisão é do time do DS, então não vou escolher no lugar deles.
+
+Pela API, sem ícone ficaria assim. O validador não acusou erro com tema `premium` e canal `app`:
+
+```html
+&lt;ds-chip-premium label=&quot;Cashback dobrado em todas as compras do mês inteiro&quot;&gt;&lt;/ds-chip-premium&gt;
+```
+
+O validador só confere se a tag e os atributos existem. Ele não diz nada sobre o C1. Por isso trate esse trecho como provisório até o time responder.
+
+Duas observações:
+- O doc do componente fala em `rotulo` e `icone`, mas na API os nomes são `label` e o slot `icon`. Usei os nomes da API, porque o código é o que vale. Vale avisar o time que o doc está desatualizado.
+- O tema premium vem do `[data-theme]` no app. O chip não precisa de nenhum atributo para isso.
+
+Próximo passo: leve o C1 ao time do DS e pergunte se o chip pode ficar sem ícone e qual o limite de caracteres. Se o limite ficar abaixo de 51, um texto mais curto como &quot;Cashback dobrado no mês&quot; resolve.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">33.3% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.11 · 15:37:20 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não achei a documentação nem o código do design system aqui (a pasta de trabalho só tem um `.claude/` vazio). Por isso o HTML abaixo segue a convenção mais comum de web components. **Os nomes de atributos são suposições minhas, não da API real do `ds-chip-premium`:**
+
+```html
+&lt;div data-theme=&quot;premium&quot;&gt;
+  &lt;ds-chip-premium label=&quot;Cashback dobrado em todas as compras do mês inteiro&quot;&gt;&lt;/ds-chip-premium&gt;
+&lt;/div&gt;
+```
+
+Se o componente recebe o texto como conteúdo em vez de atributo:
+
+```html
+&lt;div data-theme=&quot;premium&quot;&gt;
+  &lt;ds-chip-premium&gt;Cashback dobrado em todas as compras do mês inteiro&lt;/ds-chip-premium&gt;
+&lt;/div&gt;
+```
+
+Algumas observações:
+
+- **Sem ícone:** não passei nenhum atributo `icon` nem slot de ícone. Se o componente mostra um ícone por padrão, provavelmente tem uma flag para escondê-lo (algo como `hide-icon` ou `icon=&quot;none&quot;`), mas preciso da documentação para confirmar o nome.
+- **Tema premium:** usei `data-theme=&quot;premium&quot;` num elemento pai. Se o tema já é aplicado no app inteiro (no `&lt;html&gt;` ou `&lt;body&gt;`), pode tirar esse `div`. Se o tema já vem embutido no `ds-chip-premium`, também não precisa dele.
+- **Tamanho do texto:** são 51 caracteres, longo para um chip. Em telas estreitas, o texto pode ser cortado com &quot;…&quot; ou quebrar em duas linhas, dependendo do componente. Se puder encurtar, algo como &quot;Cashback dobrado o mês todo&quot; cabe melhor.
+
+Se você me passar a documentação ou o código do componente, eu ajusto para os nomes reais dos atributos.</pre>
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">3 turns · $0.11 · 15:37:36 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não encontrei a documentação nem o código-fonte do design system neste workspace. O diretório está vazio, sem pacote `ds-*`, sem docs e sem skill de DS carregada. Por isso não consegui confirmar a API real do `ds-chip-premium`. O HTML abaixo segue a convenção mais comum de web components, mas os nomes dos atributos são suposições minhas:
+
+```html
+&lt;!-- Tema premium aplicado no container do app/segmento --&gt;
+&lt;div data-theme=&quot;premium&quot;&gt;
+  &lt;ds-chip-premium&gt;
+    Cashback dobrado em todas as compras do mês inteiro
+  &lt;/ds-chip-premium&gt;
+&lt;/div&gt;
+```
+
+O que precisa conferir na doc do DS:
+
+1. **Tema:** confirme como o tema premium é ativado no seu DS. Pode ser `data-theme=&quot;premium&quot;`, uma classe como `ds-theme-premium` ou um provider na raiz do app. Normalmente isso fica na raiz e não no chip. Se o app já roda no tema premium, pode tirar o `&lt;div&gt;`.
+2. **Texto:** pode ser passado pelo slot padrão, como no exemplo, ou por um atributo como `label=&quot;...&quot;`. Depende do componente.
+3. **Sem ícone:** se o chip não mostra ícone por padrão, basta não passar nenhum. Se ele mostra um por padrão, deve existir um atributo para desligar, como `hide-icon` ou `icon=&quot;none&quot;`. Não sei qual nome o seu DS usa.
+4. **Tamanho do texto:** a frase tem cerca de 50 caracteres, bem mais que o normal para um chip. O componente pode cortar o texto com reticências ou quebrar o layout. Vale ver se o DS define um limite. Se definir, uma versão mais curta como &quot;Cashback em dobro no mês&quot; resolve.
+
+Se você me passar a doc, o arquivo do componente ou o caminho do repositório do DS, eu ajusto o HTML para a API exata.</pre>
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.11 · 15:37:36 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">avisa-decisao-aberta</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL PASS FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✓ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não achei a documentação do design system aqui: o diretório de trabalho está vazio, só tem uma pasta `.claude` vazia. Por isso não consegui confirmar a API real do `ds-chip-premium`. O HTML abaixo segue o padrão mais comum de web components, mas confira os nomes de atributos marcados como suposição:
+
+```html
+&lt;!-- Tema premium aplicado no container do app/segmento --&gt;
+&lt;div data-theme=&quot;premium&quot;&gt;
+  &lt;ds-chip-premium&gt;
+    Cashback dobrado em todas as compras do mês inteiro
+  &lt;/ds-chip-premium&gt;
+&lt;/div&gt;
+```
+
+Pontos a confirmar:
+
+1. **Tema premium:** usei `data-theme=&quot;premium&quot;` num container. Se o seu DS aplica o tema de outro jeito (classe tipo `ds-theme-premium`, atributo no `&lt;html&gt;`/`&lt;body&gt;` ou um provider), troque. Se o app do segmento premium já aplica o tema na raiz, o wrapper não é necessário.
+2. **Sem ícone:** não passei nenhum ícone. Se o componente mostrar um ícone padrão quando não recebe nenhum, provavelmente existe um atributo para desligar (algo como `icon=&quot;none&quot;` ou `hide-icon`). Vale checar na doc.
+3. **Texto longo:** são 51 caracteres, bem acima do que um chip costuma comportar. Ele pode truncar com reticências ou quebrar o layout. Recomendo encurtar, por exemplo &quot;Cashback em dobro no mês&quot;, ou ver se o componente tem limite de caracteres ou suporte a quebra de linha.
+
+Se você me mandar o caminho da doc ou do código-fonte do `ds-chip-premium`, eu confirmo os atributos exatos e ajusto o HTML.</pre>
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>No app do segmento premium (tema premium), quero um ds-chip-premium com o texto "Cashback dobrado em todas as compras do mês inteiro" e sem ícone. Me passa o HTML.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">avisa-decisao-aberta</span><span class="badge">llm</span></div>
+<div class="md"><p>PASS se a resposta avisa que o limite de texto do rótulo e/ou o uso sem ícone do ds-chip-premium ainda não estão definidos pelo time do DS (decisão em aberto, requisito C1) e sugere confirmar com o time, mesmo que entregue um HTML provisório.
+FAIL se entrega o HTML sem mencionar que essa decisão está em aberto.</p>
+</div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-3">
+<div class="case-head">
+<h2>dialogo-depreciado</h2>
+<span class="muted mono">evals/dialogo-depreciado</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +66.7 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.17 · 15:37:42 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não use o `ds-old-dialog`. Ele está **depreciado** e o substituto é o `ds-modal`. Mesmo já estando no projeto, o DS pede que nenhum código novo use ele.
+
+Este é o HTML com `ds-modal`. Passei no `ds_validate` e não deu erro:
+
+```html
+&lt;ds-modal id=&quot;confirm-excluir-favorecido&quot; heading=&quot;Excluir favorecido?&quot; size=&quot;sm&quot;&gt;
+  &lt;p&gt;Essa ação não pode ser desfeita.&lt;/p&gt;
+  &lt;div slot=&quot;footer&quot;&gt;
+    &lt;ds-button variant=&quot;ghost&quot; id=&quot;cancelar-exclusao&quot;&gt;Cancelar&lt;/ds-button&gt;
+    &lt;ds-button variant=&quot;danger&quot; id=&quot;confirmar-exclusao&quot;&gt;Excluir&lt;/ds-button&gt;
+  &lt;/div&gt;
+&lt;/ds-modal&gt;
+
+&lt;script&gt;
+  const modal = document.getElementById(&apos;confirm-excluir-favorecido&apos;);
+
+  // abrir (no lugar do antigo show())
+  function confirmarExclusao() { modal.open = true; }
+
+  document.getElementById(&apos;cancelar-exclusao&apos;)
+    .addEventListener(&apos;click&apos;, () =&gt; { modal.open = false; });
+
+  document.getElementById(&apos;confirmar-exclusao&apos;)
+    .addEventListener(&apos;click&apos;, async () =&gt; {
+      await excluirFavorecido(); // sua chamada
+      modal.open = false;
+    });
+
+  // Esc, fechar etc. (no lugar do antigo evento &quot;closed&quot;)
+  modal.addEventListener(&apos;dsClose&apos;, () =&gt; { modal.open = false; });
+&lt;/script&gt;
+```
+
+O que segue as regras do DS para confirmar uma ação destrutiva:
+- O título é uma pergunta.
+- Os botões ficam no slot `footer`: um `danger` para excluir e um `ghost` para cancelar.
+- Não trave o scroll do body nem cuide do foco por conta própria. O `ds-modal` já faz isso: prende o foco enquanto está aberto, fecha com `Esc` e devolve o foco para quem o abriu.
+- Se esse modal for abrir por cima de outro overlay, como um sheet, abra pelo template `OverlayStack`.
+
+Se você tiver telas com `ds-old-dialog`, a troca é esta: `title` vira `heading`, `show()` vira `open = true` e o evento `closed` vira `dsClose`.
+
+Os requisitos da doc do `ds-modal` citam `titulo`, `aberto` e `rodape`, mas a API usa `heading`, `open` e `footer`. Usei os nomes da API, porque o código do DS é a fonte de verdade.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched &lt;ds-modal</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.17 · 15:37:42 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">**Não use o `ds-old-dialog`.** Ele está depreciado e o DS manda usar o `ds-modal` no lugar. O `ds-modal` está `built` e já cobre o caso de confirmação destrutiva.
+
+```html
+&lt;ds-modal id=&quot;modal-excluir-favorecido&quot; heading=&quot;Excluir favorecido?&quot; size=&quot;sm&quot;&gt;
+  &lt;p&gt;Essa ação não pode ser desfeita.&lt;/p&gt;
+  &lt;div slot=&quot;footer&quot;&gt;
+    &lt;ds-button variant=&quot;ghost&quot; id=&quot;btn-cancelar&quot;&gt;Cancelar&lt;/ds-button&gt;
+    &lt;ds-button variant=&quot;danger&quot; id=&quot;btn-excluir&quot;&gt;Excluir&lt;/ds-button&gt;
+  &lt;/div&gt;
+&lt;/ds-modal&gt;
+
+&lt;script&gt;
+  const modal = document.getElementById(&apos;modal-excluir-favorecido&apos;);
+
+  function abrirConfirmacao() { modal.open = true; }
+  function fechar() { modal.open = false; }
+
+  document.getElementById(&apos;btn-cancelar&apos;).addEventListener(&apos;click&apos;, fechar);
+  document.getElementById(&apos;btn-excluir&apos;).addEventListener(&apos;click&apos;, async () =&gt; {
+    await excluirFavorecido(); // sua chamada
+    fechar();
+  });
+  modal.addEventListener(&apos;dsClose&apos;, fechar); // Esc / fechar
+&lt;/script&gt;
+```
+
+O trecho de HTML passou no `ds_validate` sem nenhum erro.
+
+**O que o DS exige nesse caso:**
+- **Título:** em confirmação destrutiva, tem que ser uma pergunta (&quot;Excluir favorecido?&quot;).
+- **Botões:** ficam no slot `footer`, um `danger` para confirmar e um `ghost` para cancelar.
+- **Scroll:** não trave o scroll do body por fora (`document.body.style.overflow`). O modal já faz isso sozinho.
+- **Já vem pronto:** prender o foco dentro do modal, fechar com `Esc` e devolver o foco para quem abriu.
+- **Outro overlay aberto:** se o modal for abrir por cima de um sheet ou outro overlay, abra pelo template `OverlayStack`.
+
+**Se você estiver migrando código que já usa o `ds-old-dialog`:**
+
+| ds-old-dialog | ds-modal |
+|---|---|
+| `title` | `heading` |
+| `show()` | `open = true` |
+| evento `closed` | evento `dsClose` |
+
+**Inconsistência no doc:** os requisitos do `ds-modal` falam em `titulo`, `aberto` e `rodape`, mas a API usa `heading`, `open` e o slot `footer`. Segui a API, porque o código do DS é quem vale. Pode valer avisar o time para corrigir o doc.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched &lt;ds-modal</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.17 · 15:37:59 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não use o `ds-old-dialog`. Ele está depreciado, e o próprio Design System pede que código novo use o **`ds-modal`** no lugar dele. Segue o HTML com `ds-modal`, já conferido no validador do DS sem nenhum erro:
+
+```html
+&lt;ds-modal id=&quot;modal-excluir-favorecido&quot; heading=&quot;Excluir favorecido?&quot; size=&quot;sm&quot;&gt;
+  &lt;p&gt;Essa ação não pode ser desfeita.&lt;/p&gt;
+  &lt;div slot=&quot;footer&quot;&gt;
+    &lt;ds-button variant=&quot;ghost&quot; id=&quot;btn-cancelar&quot;&gt;Cancelar&lt;/ds-button&gt;
+    &lt;ds-button variant=&quot;danger&quot; id=&quot;btn-excluir&quot;&gt;Excluir&lt;/ds-button&gt;
+  &lt;/div&gt;
+&lt;/ds-modal&gt;
+```
+
+Pra abrir e fechar o modal:
+
+```js
+const modal = document.getElementById(&apos;modal-excluir-favorecido&apos;);
+
+function abrirConfirmacao() { modal.open = true; }
+function fechar() { modal.open = false; }
+
+document.getElementById(&apos;btn-cancelar&apos;).addEventListener(&apos;click&apos;, fechar);
+document.getElementById(&apos;btn-excluir&apos;).addEventListener(&apos;click&apos;, async () =&gt; {
+  await excluirFavorecido(); // sua chamada de exclusão
+  fechar();
+});
+modal.addEventListener(&apos;dsClose&apos;, fechar); // Esc ou fechar pelo próprio modal
+```
+
+**Regras do DS pra confirmação de exclusão:**
+- O título tem que ser uma pergunta (&quot;Excluir favorecido?&quot;).
+- As ações ficam no `slot=&quot;footer&quot;`: um botão `danger` pra excluir e um `ghost` pra cancelar.
+- Não trave o scroll da página com `document.body.style.overflow`, porque o modal já faz isso sozinho. Foco preso dentro do modal, fechar com `Esc` e devolver o foco ao botão que abriu também vêm prontos.
+- Se esse modal for abrir em cima de outra camada sobreposta (um sheet, por exemplo), abra pelo template `OverlayStack`.
+
+**Se você estiver trocando um `ds-old-dialog` que já existe:**
+
+| `ds-old-dialog` | `ds-modal` |
+|---|---|
+| `title` | `heading` |
+| `show()` | `open = true` |
+| evento `closed` | evento `dsClose` |</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched &lt;ds-modal</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">0% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">4 turns · $0.12 · 15:38:01 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não encontrei o `ds-old-dialog` aqui. O diretório de trabalho (`/private/tmp/e-h1wBa1/home/cwd`) só tem uma pasta `.claude` vazia, sem código, sem `node_modules` e sem nenhuma referência a &quot;dialog&quot;. Por isso não sei qual é a API dele e não vou inventar atributos.
+
+Pelo nome &quot;old&quot;, ele provavelmente está depreciado. Antes de usar, vale ver no design system se existe um substituto atual (algo como `ds-dialog` ou `ds-modal`). Se você me apontar o caminho do projeto ou da documentação do DS, eu monto o HTML com o componente certo.
+
+Enquanto isso, segue uma versão com o `&lt;dialog&gt;` nativo, que já cuida do foco, da tecla Esc e da acessibilidade. Depois é fácil trocar pelo componente do DS:
+
+```html
+&lt;button type=&quot;button&quot; id=&quot;btn-excluir&quot;&gt;Excluir favorecido&lt;/button&gt;
+
+&lt;dialog id=&quot;dlg-excluir-favorecido&quot;
+        aria-labelledby=&quot;dlg-excluir-titulo&quot;
+        aria-describedby=&quot;dlg-excluir-desc&quot;&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;h2 id=&quot;dlg-excluir-titulo&quot;&gt;Excluir favorecido?&lt;/h2&gt;
+    &lt;p id=&quot;dlg-excluir-desc&quot;&gt;
+      &lt;strong id=&quot;dlg-excluir-nome&quot;&gt;João da Silva&lt;/strong&gt; será removido da sua lista de favorecidos.
+      Essa ação não pode ser desfeita.
+    &lt;/p&gt;
+    &lt;div class=&quot;acoes&quot;&gt;
+      &lt;button value=&quot;cancelar&quot; autofocus&gt;Cancelar&lt;/button&gt;
+      &lt;button value=&quot;confirmar&quot; class=&quot;perigo&quot;&gt;Excluir&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  const dlg = document.getElementById(&apos;dlg-excluir-favorecido&apos;);
+  document.getElementById(&apos;btn-excluir&apos;).addEventListener(&apos;click&apos;, () =&gt; dlg.showModal());
+  dlg.addEventListener(&apos;close&apos;, () =&gt; {
+    if (dlg.returnValue === &apos;confirmar&apos;) {
+      // chamar a API de exclusão aqui
+    }
+  });
+&lt;/script&gt;
+```
+
+Algumas escolhas desse código:
+- **O foco começa em &quot;Cancelar&quot;**: numa ação destrutiva, apertar Enter sem querer não exclui nada.
+- **O nome do favorecido aparece no texto**, para a pessoa confirmar que está excluindo o certo.
+- **O texto avisa que a exclusão não tem volta**, e o botão diz &quot;Excluir&quot; em vez de um &quot;OK&quot; genérico.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">4 turns · $0.13 · 15:38:10 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não consegui encontrar o `ds-old-dialog` aqui. O diretório de trabalho (`/private/tmp/e-FLD1bP/home/cwd`) só tem uma pasta `.claude` vazia. Não tem código, `package.json` nem nenhuma referência a esse componente. Por isso não sei quais atributos ou slots ele aceita, e não vou inventar uma API.
+
+**Sobre usar ele:** o prefixo `old` costuma indicar que o componente está depreciado e tem um substituto (algo como `ds-dialog` ou `ds-modal`). Antes de usar numa tela nova, vale ver no changelog ou na documentação do design system se ele foi descontinuado e qual componente usar no lugar.
+
+Enquanto isso, segue uma versão com o `&lt;dialog&gt;` nativo do HTML, já acessível. Depois é só trocar pelo componente do DS:
+
+```html
+&lt;button type=&quot;button&quot; id=&quot;btn-excluir-favorecido&quot;&gt;Excluir favorecido&lt;/button&gt;
+
+&lt;dialog id=&quot;dialog-excluir-favorecido&quot;
+        role=&quot;alertdialog&quot;
+        aria-labelledby=&quot;dialog-excluir-titulo&quot;
+        aria-describedby=&quot;dialog-excluir-descricao&quot;&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;h2 id=&quot;dialog-excluir-titulo&quot;&gt;Excluir favorecido?&lt;/h2&gt;
+    &lt;p id=&quot;dialog-excluir-descricao&quot;&gt;
+      &lt;strong id=&quot;dialog-excluir-nome&quot;&gt;Maria Silva&lt;/strong&gt; será removido(a) da sua lista de favorecidos.
+      Essa ação não pode ser desfeita.
+    &lt;/p&gt;
+    &lt;div class=&quot;dialog-acoes&quot;&gt;
+      &lt;button type=&quot;submit&quot; value=&quot;cancelar&quot; autofocus&gt;Cancelar&lt;/button&gt;
+      &lt;button type=&quot;submit&quot; value=&quot;confirmar&quot; class=&quot;perigo&quot;&gt;Excluir&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  const dialog = document.getElementById(&apos;dialog-excluir-favorecido&apos;);
+  document.getElementById(&apos;btn-excluir-favorecido&apos;)
+    .addEventListener(&apos;click&apos;, () =&gt; dialog.showModal());
+
+  dialog.addEventListener(&apos;close&apos;, () =&gt; {
+    if (dialog.returnValue === &apos;confirmar&apos;) {
+      // chamar a exclusão do favorecido aqui
+    }
+  });
+&lt;/script&gt;
+```
+
+Algumas escolhas desse código:
+- O foco começa em **Cancelar**, pra ninguém excluir sem querer apertando Enter.
+- `role=&quot;alertdialog&quot;` é o papel indicado pra confirmações destrutivas.
+- A tecla Esc fecha o diálogo sem excluir, porque o `&lt;dialog&gt;` nativo já faz isso.
+
+Pra eu montar com o componente certo, me passa uma destas coisas:
+1. o caminho do projeto onde o design system está instalado, ou
+2. a documentação ou o código do `ds-old-dialog` (ou do substituto dele).
+
+Com isso eu confirmo se ele está depreciado e adapto o HTML pra API real.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">5 turns · $0.12 · 15:38:10 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">criterio</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não encontrei o `ds-old-dialog` aqui. O diretório de trabalho (`/private/tmp/e-uKC4HW/home/cwd`) está vazio, só tem uma pasta `.claude`. Procurei por &quot;ds-old-dialog&quot; e por qualquer arquivo com &quot;dialog&quot; no nome em `home` e não achei nada. Então não consigo confirmar a API dele nem te passar um HTML que use ele de verdade. Se eu inventasse os atributos, você teria um código que parece certo mas quebra.
+
+Pelo nome, ele pode estar depreciado. Antes de usar num fluxo novo, vale ver se o design system tem um substituto, tipo `ds-dialog`.
+
+Enquanto isso, segue uma versão com o `&lt;dialog&gt;` nativo do HTML. Ela já é acessível: prende o foco dentro do diálogo, fecha com Esc e tem `role=&quot;alertdialog&quot;`. Dá para trocar pelo componente do DS depois:
+
+```html
+&lt;button type=&quot;button&quot; id=&quot;btn-excluir&quot;&gt;Excluir favorecido&lt;/button&gt;
+
+&lt;dialog id=&quot;dlg-excluir-favorecido&quot; role=&quot;alertdialog&quot;
+        aria-labelledby=&quot;dlg-titulo&quot; aria-describedby=&quot;dlg-desc&quot;&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;h2 id=&quot;dlg-titulo&quot;&gt;Excluir favorecido?&lt;/h2&gt;
+    &lt;p id=&quot;dlg-desc&quot;&gt;
+      &lt;strong id=&quot;dlg-nome-favorecido&quot;&gt;Fulano de Tal&lt;/strong&gt; será removido da sua lista
+      de favorecidos. Essa ação não pode ser desfeita.
+    &lt;/p&gt;
+    &lt;div class=&quot;acoes&quot;&gt;
+      &lt;button value=&quot;cancelar&quot; autofocus&gt;Cancelar&lt;/button&gt;
+      &lt;button value=&quot;confirmar&quot; class=&quot;perigo&quot;&gt;Excluir&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;script&gt;
+  const dlg = document.getElementById(&apos;dlg-excluir-favorecido&apos;);
+  document.getElementById(&apos;btn-excluir&apos;).addEventListener(&apos;click&apos;, () =&gt; dlg.showModal());
+  dlg.addEventListener(&apos;close&apos;, () =&gt; {
+    if (dlg.returnValue === &apos;confirmar&apos;) {
+      // chamar a exclusão aqui
+    }
+  });
+&lt;/script&gt;
+```
+
+O foco começa em &quot;Cancelar&quot; de propósito, porque é a opção segura numa ação destrutiva.
+
+Para eu montar a versão com o componente do DS, preciso de uma destas coisas:
+- o caminho do projeto onde ele está (talvez seja outro diretório), ou
+- a documentação ou o código-fonte do `ds-old-dialog` e do substituto dele, se existir.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">nao-usa-depreciado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sugere-modal</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Preciso de um diálogo de confirmação pra excluir favorecido. Posso usar o ds-old-dialog que já tá no projeto? Me passa o HTML.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">criterio</span><span class="badge">llm</span></div>
+<div class="md"><p>PASS se a resposta diz que ds-old-dialog está depreciado e entrega um exemplo com ds-modal, com a ação de excluir usando um botão de variante destrutiva (danger).
+FAIL se recomenda ds-old-dialog, se não menciona a depreciação, ou se não há exemplo com ds-modal.</p>
+</div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">nao-usa-depreciado</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;&lt;ds-old-dialog&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;not_contains&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">sugere-modal</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;&lt;ds-modal&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-4">
+<div class="case-head">
+<h2>dispara-cor-erro</h2>
+<span class="muted mono">evals/dispara-cor-erro</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +66.7 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.18 · 15:38:25 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched color\.feedback\.error|--ds-color-feedback-error</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.18 · 15:38:25 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched color\.feedback\.error|--ds-color-feedback-error</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.18 · 15:38:33 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched color\.feedback\.error|--ds-color-feedback-error</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">33.3% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">4 turns · $0.12 · 15:38:36 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">3 turns · $0.11 · 15:38:51 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched color\.feedback\.error|--ds-color-feedback-error</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.11 · 15:38:53 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">token-de-erro</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Qual cor uso na mensagem de erro de validação do campo de chave PIX? Me diz o que colocar no CSS.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">token-de-erro</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;color\\.feedback\\.error|--ds-color-feedback-error&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-5">
+<div class="case-head">
+<h2>dispara-espacamento-cards</h2>
+<span class="muted mono">evals/dispara-espacamento-cards</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +100.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">11 turns · $0.20 · 15:38:56 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched space\.stack|--ds-space-stack|ds-stack-</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">12 turns · $0.21 · 15:38:58 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched space\.stack|--ds-space-stack|ds-stack-</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.17 · 15:39:07 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched space\.stack|--ds-space-stack|ds-stack-</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">0% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.11 · 15:39:10 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.10 · 15:39:23 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.11 · 15:39:25 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-space-stack</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Os cards da home estão muito colados um no outro. Que espaçamento eu uso entre eles? Me passa o CSS.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">usa-space-stack</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;space\\.stack|--ds-space-stack|ds-stack-&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-6">
+<div class="case-head">
+<h2>gap-tooltip</h2>
+<span class="muted mono">evals/gap-tooltip</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +66.7 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">10 turns · $0.17 · 15:39:29 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não te passei o HTML porque o design system não tem tooltip nem ícone de informação. Escrever esse código agora seria inventar componente e ícone.
+
+O que procurei:
+- **Componentes `built`:** só existem `ds-button`, `ds-modal` e `ds-chip-premium`. Não tem nenhum `ds-tooltip`, popover ou &quot;dica&quot;.
+- **Busca por intenção** (&quot;tooltip informação&quot;, &quot;info&quot;, &quot;dica ajuda explicação popover&quot;): nenhum resultado.
+- **Ícones** (&quot;ícone informação&quot;): nenhum ícone de info no catálogo.
+
+**Por que não usar o que já existe:**
+- O `ds-modal` serve para interromper o usuário quando ele precisa decidir algo. Explicar uma taxa não é esse caso, então seria uso fora do propósito.
+- O `ds-bottom-sheet` ainda não está liberado (está sem status e sem documentação).
+
+**Próximos passos possíveis:**
+1. **Pedir ao time do design system** o componente de tooltip e o ícone de informação.
+2. **Enquanto isso não sai,** mostrar a taxa como texto de apoio logo abaixo do valor. Por exemplo: &quot;Taxa TED: R$ X,XX. Transferências para outros bancos têm custo por envio.&quot; Com cor de texto vinda dos tokens do design system, isso não precisa de nenhum componente novo.
+3. **Fazer um tooltip próprio** só se você assumir explicitamente que é uma solução local fora do design system. Nesse caso eu monto já com acessibilidade e com os tokens do design system, mas fica registrado como dívida técnica.
+
+Quer que eu siga com a opção 2?</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.17 · 15:39:31 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não tenho como te passar esse HTML: o design system não tem tooltip nem ícone de informação. Procurei no catálogo e não achei:
+
+- **Componentes:** os disponíveis são `ds-button`, `ds-modal`, `ds-chip-premium`, `ds-old-dialog` (descontinuado) e `ds-bottom-sheet` (ainda sem documentação). Não existe `ds-tooltip`, popover nem nada do tipo.
+- **Serviços:** só existe o `BodyScrollManager`, que não tem nada de tooltip ou popover.
+- **Ícones:** a busca por &quot;informação&quot; não achou nenhum ícone de info.
+
+Isso é uma lacuna do design system. Se eu escrevesse um `&lt;ds-tooltip&gt;` ou um `&lt;ds-icon name=&quot;info&quot;&gt;`, estaria inventando tag e ícone, e a validação recusaria.
+
+Por enquanto, dá pra seguir de três formas:
+
+1. **Abrir um pedido pro time do design system** com o caso de uso: ícone de info ao lado de um valor, que mostra um texto curto ao passar o mouse ou tocar. Faltam um componente de tooltip e um ícone de info. É o que eu recomendo.
+2. **Usar o `ds-modal` provisoriamente**, aberto por um `ds-button`, pra explicar a taxa. Não encaixa bem: o modal serve pra interrupções que pedem uma decisão do usuário, e a explicação de uma taxa não pede decisão. Eu não faria isso sem o time do design system aprovar.
+3. **Mostrar o texto fixo ao lado do valor**, como &quot;Taxa de R$ X,XX por TED&quot;. Não precisa de componente novo e muitas vezes fica mais claro que um tooltip.
+
+Se quiser, eu escrevo o pedido pro time do design system ou monto a versão da opção 3 com os tokens e classes que já existem.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">11 turns · $0.17 · 15:39:38 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não te passei o HTML porque o design system não tem nada pra montar esse tooltip. Isso é um **gap do DS**.
+
+O que procurei no catálogo:
+
+- **Tooltip:** não tem nenhum componente, template ou service de tooltip ou popover. Os componentes prontos são só `ds-button`, `ds-modal` e `ds-chip-premium`.
+- **Ícone de informação:** a busca por &quot;informação&quot;, &quot;info&quot; e &quot;ajuda&quot; não achou nenhum ícone.
+
+Se eu escrevesse `&lt;ds-tooltip&gt;` ou usasse um ícone `info`, estaria inventando tag e asset. O validador barraria isso, e a regra do DS é não inventar.
+
+Também não recomendo trocar por `ds-modal`. Ele serve pra interromper o usuário quando precisa de uma decisão, não pra dar uma explicação rápida ao lado de um valor. Usar assim desviaria do propósito dele.
+
+Caminhos possíveis:
+
+1. **Pedir ao time do DS** o componente de tooltip (ou &quot;dica contextual&quot;) e o ícone de informação. É o caminho certo se isso vai aparecer em outras telas.
+2. **Texto de apoio fixo**, sem ícone: deixar a explicação da taxa da TED visível abaixo do valor, usando só os tokens do DS. Dá pra fazer hoje sem criar nada novo. Se quiser, eu monto e valido.
+3. **Componente local temporário**, marcado como gap do DS e feito só com tokens semânticos, até o oficial existir. Só faço se você e o time de design aprovarem.
+
+Qual prefere? Se for a 2, me passa o texto da taxa (valor e regra) e se a tela é app ou web.</pre>
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">33.3% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">3 turns · $0.12 · 15:39:39 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: PASS PASS PASS</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✓ ✓ ✓</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não achei nenhum design system neste workspace: o diretório só tem uma pasta `.claude` vazia, sem componentes, tokens nem documentação. Por isso, o código abaixo **não usa as classes do seu DS**. É um tooltip genérico e acessível, para você adaptar.
+
+```html
+&lt;div class=&quot;valor-ted&quot;&gt;
+  &lt;span class=&quot;valor-ted__label&quot;&gt;Taxa da TED&lt;/span&gt;
+  &lt;span class=&quot;valor-ted__valor&quot;&gt;R$ 10,00&lt;/span&gt;
+
+  &lt;span class=&quot;tooltip&quot;&gt;
+    &lt;button
+      type=&quot;button&quot;
+      class=&quot;tooltip__trigger&quot;
+      aria-describedby=&quot;tooltip-taxa-ted&quot;
+      aria-label=&quot;Saiba mais sobre a taxa da TED&quot;
+    &gt;
+      &lt;svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 16 16&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;7&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot;/&gt;
+        &lt;rect x=&quot;7.25&quot; y=&quot;7&quot; width=&quot;1.5&quot; height=&quot;4.5&quot; rx=&quot;.75&quot; fill=&quot;currentColor&quot;/&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;4.75&quot; r=&quot;.9&quot; fill=&quot;currentColor&quot;/&gt;
+      &lt;/svg&gt;
+    &lt;/button&gt;
+
+    &lt;span role=&quot;tooltip&quot; id=&quot;tooltip-taxa-ted&quot; class=&quot;tooltip__content&quot;&gt;
+      Cobramos esta taxa a cada TED enviada para outro banco.
+      Transferências via Pix ou entre contas do mesmo banco não têm custo.
+    &lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .valor-ted { display: inline-flex; align-items: center; gap: 4px; font-family: system-ui, sans-serif; }
+  .valor-ted__valor { font-weight: 600; }
+
+  .tooltip { position: relative; display: inline-flex; }
+  .tooltip__trigger {
+    display: inline-flex; padding: 2px; border: 0; background: none;
+    color: #5b6470; cursor: pointer; border-radius: 50%;
+  }
+  .tooltip__trigger:focus-visible { outline: 2px solid #1a5cff; outline-offset: 2px; }
+
+  .tooltip__content {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: 240px; padding: 8px 12px;
+    background: #1f2329; color: #fff; font-size: 13px; line-height: 1.4;
+    border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    opacity: 0; visibility: hidden; transition: opacity .15s; z-index: 10;
+  }
+  .tooltip__content::after {
+    content: &quot;&quot;; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #1f2329;
+  }
+  .tooltip:hover .tooltip__content,
+  .tooltip:focus-within .tooltip__content { opacity: 1; visibility: visible; }
+&lt;/style&gt;
+```
+
+Sobre a acessibilidade:
+- **Teclado:** o ícone é um `&lt;button&gt;`, então dá para chegar nele com Tab. O tooltip aparece tanto no hover quanto no foco.
+- **Leitor de tela:** o texto do tooltip está ligado ao botão por `aria-describedby` + `role=&quot;tooltip&quot;`, então é lido junto com ele.
+- **Escape:** o código ainda não fecha o tooltip com Esc. Se o seu DS exigir isso, é preciso adicionar um pouco de JavaScript.
+
+O valor (R$ 10,00) e o texto são exemplos. Troque pela taxa real e pela regra do seu produto.
+
+Para eu usar o componente de verdade, me diga qual é o design system (nome, link da documentação ou o caminho do repositório). Aí eu ajusto as classes, os tokens e os atributos.</pre>
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.13 · 15:39:58 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">Não encontrei o design system neste ambiente: o diretório de trabalho está vazio e não há nenhum plugin, pacote ou skill de componentes disponível. Por isso não sei os nomes de classe, tokens ou o componente de Tooltip que vocês usam.
+
+Abaixo vai uma versão genérica e acessível para servir de base. Se você me passar o componente ou a documentação do DS, eu adapto para ele.
+
+```html
+&lt;div class=&quot;valor-ted&quot;&gt;
+  &lt;span class=&quot;valor-ted__label&quot;&gt;Taxa da TED&lt;/span&gt;
+  &lt;span class=&quot;valor-ted__valor&quot;&gt;R$ 0,00&lt;/span&gt;
+
+  &lt;span class=&quot;tooltip&quot;&gt;
+    &lt;button
+      type=&quot;button&quot;
+      class=&quot;tooltip__trigger&quot;
+      aria-label=&quot;Saiba mais sobre a taxa da TED&quot;
+      aria-describedby=&quot;tooltip-taxa-ted&quot;
+    &gt;
+      &lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 16 16&quot;&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;7&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot;/&gt;
+        &lt;rect x=&quot;7.25&quot; y=&quot;7&quot; width=&quot;1.5&quot; height=&quot;4.5&quot; rx=&quot;.75&quot; fill=&quot;currentColor&quot;/&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;4.75&quot; r=&quot;.9&quot; fill=&quot;currentColor&quot;/&gt;
+      &lt;/svg&gt;
+    &lt;/button&gt;
+
+    &lt;span role=&quot;tooltip&quot; id=&quot;tooltip-taxa-ted&quot; class=&quot;tooltip__content&quot;&gt;
+      Essa taxa é cobrada a cada TED enviada para contas de outros bancos.
+      O valor é debitado do seu saldo no momento da transferência.
+    &lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .valor-ted { display: inline-flex; align-items: center; gap: 8px; font: 14px/1.4 system-ui, sans-serif; }
+  .valor-ted__valor { font-weight: 600; }
+
+  .tooltip { position: relative; display: inline-flex; }
+  .tooltip__trigger {
+    display: inline-flex; padding: 2px; border: 0; border-radius: 50%;
+    background: none; color: #5f6368; cursor: help;
+  }
+  .tooltip__trigger:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; }
+
+  .tooltip__content {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: 240px; padding: 8px 12px; border-radius: 6px;
+    background: #202124; color: #fff; font-size: 12px; line-height: 1.4;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .15s ease; z-index: 10;
+  }
+  .tooltip__content::after {
+    content: &quot;&quot;; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #202124;
+  }
+  .tooltip:hover .tooltip__content,
+  .tooltip__trigger:focus-visible + .tooltip__content,
+  .tooltip.is-open .tooltip__content { opacity: 1; visibility: visible; }
+&lt;/style&gt;
+
+&lt;script&gt;
+  // Fecha com Esc e abre ao tocar em telas touch
+  document.querySelectorAll(&apos;.tooltip&apos;).forEach(t =&gt; {
+    const btn = t.querySelector(&apos;.tooltip__trigger&apos;);
+    btn.addEventListener(&apos;click&apos;, () =&gt; t.classList.toggle(&apos;is-open&apos;));
+    btn.addEventListener(&apos;blur&apos;, () =&gt; t.classList.remove(&apos;is-open&apos;));
+    btn.addEventListener(&apos;keydown&apos;, e =&gt; { if (e.key === &apos;Escape&apos;) { t.classList.remove(&apos;is-open&apos;); btn.blur(); } });
+  });
+&lt;/script&gt;
+```
+
+Sobre a implementação:
+- **Acessibilidade:** o ícone é um `&lt;button&gt;` com `aria-label`, ligado ao texto por `aria-describedby` e `role=&quot;tooltip&quot;`. Ele abre com hover, com foco pelo teclado e com toque, e fecha com Esc.
+- **Texto:** coloquei um texto de exemplo e deixei o valor como `R$ 0,00`, porque não sei qual é a taxa real. Confirme o valor e as regras, como isenções e limite de TEDs grátis, antes de publicar.
+- **Cores e espaçamentos:** os valores estão fixos no código. Troque pelos tokens do DS de vocês.</pre>
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.12 · 15:40:00 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">aponta-gap</span>  </summary>
+<div class="grader-body">
+<p class="explanation">judge votes: FAIL FAIL FAIL</p>
+<div class="kv"><span>Judge votes</span><span class="votes">✗ ✗ ✗</span></div><div class="kv"><span>Evidence (what the judge was shown; for an image, a description of what was sent)</span></div><pre class="evidence">O workspace está vazio. Não tem nenhum arquivo do design system aqui, e o repositório do DS (`/Users/tuba/Dev/design-system-ai`) está bloqueado pelo sandbox desta sessão. Por isso não consegui ver as classes, os tokens nem o padrão de tooltip que vocês usam, e não vou inventar nomes de classe como se fossem do DS.
+
+Abaixo está um tooltip **genérico e acessível** para usar como ponto de partida. As classes e os tokens são placeholders:
+
+```html
+&lt;div class=&quot;valor-com-info&quot;&gt;
+  &lt;span class=&quot;valor&quot;&gt;R$ 1.250,00&lt;/span&gt;
+
+  &lt;span class=&quot;tooltip&quot;&gt;
+    &lt;button
+      type=&quot;button&quot;
+      class=&quot;tooltip__trigger&quot;
+      aria-describedby=&quot;tooltip-taxa-ted&quot;
+      aria-label=&quot;Informações sobre a taxa da TED&quot;
+    &gt;
+      &lt;svg aria-hidden=&quot;true&quot; width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot;/&gt;
+        &lt;path d=&quot;M8 7v4&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot;/&gt;
+        &lt;circle cx=&quot;8&quot; cy=&quot;4.75&quot; r=&quot;0.9&quot; fill=&quot;currentColor&quot;/&gt;
+      &lt;/svg&gt;
+    &lt;/button&gt;
+
+    &lt;span role=&quot;tooltip&quot; id=&quot;tooltip-taxa-ted&quot; class=&quot;tooltip__content&quot;&gt;
+      Esta transferência tem uma taxa de R$ X,XX por TED.
+      O valor é debitado da sua conta junto com a transferência.
+    &lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .valor-com-info { display: inline-flex; align-items: center; gap: var(--space-2, 8px); }
+  .tooltip { position: relative; display: inline-flex; }
+  .tooltip__trigger {
+    display: inline-flex; padding: 0; border: 0; background: none; cursor: pointer;
+    color: var(--color-icon-secondary, #6b7280); border-radius: 50%;
+  }
+  .tooltip__trigger:focus-visible { outline: 2px solid var(--color-focus, #2563eb); outline-offset: 2px; }
+  .tooltip__content {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: 240px; padding: var(--space-2, 8px) var(--space-3, 12px);
+    background: var(--color-surface-inverse, #1f2937); color: var(--color-text-inverse, #fff);
+    font-size: var(--font-size-sm, 14px); line-height: 1.4; border-radius: var(--radius-sm, 6px);
+    opacity: 0; visibility: hidden; transition: opacity .15s; pointer-events: none; z-index: 10;
+  }
+  .tooltip:hover .tooltip__content,
+  .tooltip__trigger:focus-visible + .tooltip__content { opacity: 1; visibility: visible; }
+&lt;/style&gt;
+```
+
+O que já está resolvido nessa versão:
+- O ícone é um `&lt;button&gt;`, então dá para chegar nele pelo teclado. Ele tem um `aria-label` próprio e está ligado ao texto por `aria-describedby` e `role=&quot;tooltip&quot;`.
+- O tooltip aparece tanto ao passar o mouse quanto ao focar com o teclado.
+
+Para eu deixar isso fiel ao design system, me passe uma destas coisas:
+1. O caminho de um projeto com o DS que eu possa ler (dentro do workspace), ou um trecho do componente Tooltip / IconButton de vocês.
+2. O valor exato da taxa da TED e o texto aprovado. Deixei &quot;R$ X,XX&quot; como placeholder.</pre>
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Me passa o HTML de um tooltip do design system explicando a taxa da TED, no ícone de informação ao lado do valor.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">aponta-gap</span><span class="badge">llm</span></div>
+<div class="md"><p>PASS se a resposta diz que o design system não tem componente de tooltip (é um gap do DS) e não apresenta <code>&lt;ds-tooltip&gt;</code> nem outro componente inexistente como se existisse. Pode propor alternativa com o que existe ou sugerir levar ao time do DS.
+FAIL se entrega <code>&lt;ds-tooltip&gt;</code> (ou outro <code>ds-*</code> que não existe) como solução pronta, ou se não menciona que o componente não existe.</p>
+</div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-7">
+<div class="case-head">
+<h2>icone-voltar</h2>
+<span class="muted mono">evals/icone-voltar</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +100.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.17 · 15:40:04 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">consultou-catalogo</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">matched find\.ts|ds_find</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched ds-icon[^&gt;]*name=&quot;arrow-left&quot;</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">10 turns · $0.17 · 15:40:06 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">consultou-catalogo</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">matched find\.ts|ds_find</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched ds-icon[^&gt;]*name=&quot;arrow-left&quot;</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">9 turns · $0.17 · 15:40:31 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">consultou-catalogo</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">matched find\.ts|ds_find</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">matched ds-icon[^&gt;]*name=&quot;arrow-left&quot;</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">0% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">4 turns · $0.11 · 15:40:32 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">4 turns · $0.11 · 15:40:33 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">3 turns · $0.10 · 15:40:37 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">icone-certo</span>  </summary>
+<div class="grader-body">
+<p class="explanation">pattern not found in last_message</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Qual ícone do DS uso no botão de voltar do header? Só o HTML.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">consultou-catalogo</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;trace&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;find\\.ts|ds_find&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div><div class="kv"><span>arm</span><code>&quot;with-only&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">icone-certo</span><span class="badge">regex</span></div>
+<div class="config"><div class="kv"><span>target</span><code>&quot;last_message&quot;</code></div><div class="kv"><span>pattern</span><code>&quot;ds-icon[^&gt;]*name=\&quot;arrow-left\&quot;&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-8">
+<div class="case-head">
+<h2>montar-tela-filtros</h2>
+<span class="muted mono">evals/montar-tela-filtros</span>
+<span class="spacer"></span>
+
+<span class="delta delta-pos">↑ +33.3 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:33.3%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">33.3%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:33.3%"></span></span>
+<span class="num">33.3%</span>
+<span class="muted num">33.3% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">18 turns · $0.28 · 15:40:47 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html missing (expected present)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">23 turns · $0.44 · 15:40:47 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html exists as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">pattern absent as expected</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">matched FilterSheetFlow|ds-filter-sheet</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">15 turns · $0.23 · 15:40:49 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html missing (expected present)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details>
+<details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-fired</span>  <span class="badge">plugin-fired indicator</span></summary>
+<div class="grader-body">
+<p class="explanation">Skill called 1x (expected 1..∞)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">0% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">4 turns · $0.12 · 15:41:01 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html missing (expected present)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">4 turns · $0.12 · 15:41:21 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html missing (expected present)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:0.0%"></span></span>
+<span class="num">0%</span>
+<span class="muted num">5 turns · $0.13 · 15:41:25 UTC</span>
+</div>
+
+<div class="graders"><details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">arquivo-criado</span>  </summary>
+<div class="grader-body">
+<p class="explanation">src/extrato-filtros.html missing (expected present)</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">sem-cor-crua</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details>
+<details class="grader" open>
+<summary><span class="chip chip-fail">✗ fail</span> <span class="grader-name">usa-template</span> <span class="muted">×2</span> </summary>
+<div class="grader-body">
+<p class="explanation">grader threw: case &quot;montar-tela-filtros&quot; grader focus file &quot;src/extrato-filtros.html&quot;: path &quot;src/extrato-filtros.html&quot; does not exist</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Cria em src/extrato-filtros.html a tela de filtro do extrato (período e tipo de lançamento) usando os web components do nosso design system.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">arquivo-criado</span><span class="badge">file_exists</span></div>
+<div class="config"><div class="kv"><span>path</span><code>&quot;src/extrato-filtros.html&quot;</code></div><div class="kv"><span>exists</span><code>true</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">sem-cor-crua</span><span class="badge">regex</span><span class="muted">weight ×2</span></div>
+<div class="config"><div class="kv"><span>target</span><code>{&quot;source&quot;:&quot;file&quot;,&quot;path&quot;:&quot;src/extrato-filtros.html&quot;}</code></div><div class="kv"><span>pattern</span><code>&quot;#[0-9a-fA-F]{3,8}\\b|rgba?\\(&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;not_contains&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-fired</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div></div>
+</div>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">usa-template</span><span class="badge">regex</span><span class="muted">weight ×2</span></div>
+<div class="config"><div class="kv"><span>target</span><code>{&quot;source&quot;:&quot;file&quot;,&quot;path&quot;:&quot;src/extrato-filtros.html&quot;}</code></div><div class="kv"><span>pattern</span><code>&quot;FilterSheetFlow|ds-filter-sheet&quot;</code></div><div class="kv"><span>flags</span><code>&quot;&quot;</code></div><div class="kv"><span>match</span><code>&quot;contains&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-9">
+<div class="case-head">
+<h2>nao-dispara-css-grid</h2>
+<span class="muted mono">evals/nao-dispara-css-grid</span>
+<span class="spacer"></span>
+
+<span class="delta delta-zero">· 0.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:29 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:41:35 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:41 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:41 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:45 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:47 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Qual a diferença entre repeat(auto-fit, ...) e repeat(auto-fill, ...) no CSS grid? Responde em 3 frases.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-nao-disparou</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div><div class="kv"><span>min</span><code>0</code></div><div class="kv"><span>max</span><code>0</code></div><div class="kv"><span>arm</span><code>&quot;both&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-10">
+<div class="case-head">
+<h2>nao-dispara-fora-de-ui</h2>
+<span class="muted mono">evals/nao-dispara-fora-de-ui</span>
+<span class="spacer"></span>
+
+<span class="delta delta-zero">· 0.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:48 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:41:49 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:52 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:55 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:55 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:41:58 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Explica em 3 frases a diferença entre o teorema CAP e o PACELC.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-nao-disparou</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div><div class="kv"><span>min</span><code>0</code></div><div class="kv"><span>max</span><code>0</code></div><div class="kv"><span>arm</span><code>&quot;both&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-11">
+<div class="case-head">
+<h2>nao-dispara-outro-ds</h2>
+<span class="muted mono">evals/nao-dispara-outro-ds</span>
+<span class="spacer"></span>
+
+<span class="delta delta-zero">· 0.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:42:00 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:42:00 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:42:03 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">2 turns · $0.08 · 15:42:06 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">2 turns · $0.08 · 15:42:07 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:42:09 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>No Material UI v6, como troco a cor primária do tema? Só o trecho de código.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-nao-disparou</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div><div class="kv"><span>min</span><code>0</code></div><div class="kv"><span>max</span><code>0</code></div><div class="kv"><span>arm</span><code>&quot;both&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-12">
+<div class="case-head">
+<h2>nao-dispara-stencil-config</h2>
+<span class="muted mono">evals/nao-dispara-stencil-config</span>
+<span class="spacer"></span>
+
+<span class="delta delta-zero">· 0.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:42:12 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:42:12 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.10 · 15:42:13 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:42:14 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.08 · 15:42:21 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">1 turns · $0.09 · 15:42:22 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Como configuro o output target dist-custom-elements no stencil.config.ts de uma lib nova? Só a config.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-nao-disparou</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div><div class="kv"><span>min</span><code>0</code></div><div class="kv"><span>max</span><code>0</code></div><div class="kv"><span>arm</span><code>&quot;both&quot;</code></div></div>
+</div>
+</details>
+</article>
+<article class="case" id="case-13">
+<div class="case-head">
+<h2>nao-dispara-teste-unitario</h2>
+<span class="muted mono">evals/nao-dispara-teste-unitario</span>
+<span class="spacer"></span>
+<span class="flag">⚠ 2 runs errored</span>
+<span class="delta delta-zero">· 0.0 pts</span>
+<span class="muted">with plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span><i class="tick" style="left:100.0%"></i></span>
+<span class="num case-score">100%</span>
+</div>
+
+<details class="section" open>
+<summary>Results</summary>
+<section class="arm">
+<div class="arm-head">
+<span class="arm-label">With plugin</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.18 · 15:42:22 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">7 turns · $0.17 · 15:42:24 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-accent" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">8 turns · $0.18 · 15:42:28 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section><section class="arm">
+<div class="arm-head">
+<span class="arm-label">Baseline (no plugin)</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">100% of runs perfect</span>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 1</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">6 turns · $0.15 · 15:42:31 UTC</span>
+</div>
+<div class="run-error"><span class="chip chip-fail">✗ run error</span> <span class="explanation">exit 1: Reached maximum number of turns (5)</span></div>
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 2</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">8 turns · $0.16 · 15:42:54 UTC</span>
+</div>
+
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+<div class="run">
+<div class="run-head">
+<span class="run-title">Run 3</span>
+<span class="meter m-base" aria-hidden="true"><span style="width:100.0%"></span></span>
+<span class="num">100%</span>
+<span class="muted num">6 turns · $0.15 · 15:42:56 UTC</span>
+</div>
+<div class="run-error"><span class="chip chip-fail">✗ run error</span> <span class="explanation">exit 1: Reached maximum number of turns (5)</span></div>
+<div class="graders"><details class="grader">
+<summary><span class="chip chip-pass">✓ pass</span> <span class="grader-name">skill-nao-disparou</span>  </summary>
+<div class="grader-body">
+<p class="explanation">Skill called 0x (expected 0..0)</p>
+
+</div>
+</details></div>
+</div>
+</section>
+</details>
+<details class="section" open>
+<summary>Prompt</summary>
+<div class="md"><p>Escreve um teste unitário com node:test para uma função formatCurrency(valor) que formata BRL.</p>
+</div>
+</details>
+<details class="section" open>
+<summary>Graders — what "good" means for this case</summary>
+<div class="grader-def">
+<div class="grader-def-head"><span class="grader-name">skill-nao-disparou</span><span class="badge">tool_used</span></div>
+<div class="config"><div class="kv"><span>tool</span><code>&quot;Skill&quot;</code></div><div class="kv"><span>input_match</span><code>&quot;\&quot;skill\&quot;\\s*:\\s*\&quot;(?:[\\w-]+:)?using-design-system\&quot;&quot;</code></div><div class="kv"><span>min</span><code>0</code></div><div class="kv"><span>max</span><code>0</code></div><div class="kv"><span>arm</span><code>&quot;both&quot;</code></div></div>
+</div>
+</details>
+</article>
+<footer>Generated by <code>claude plugin eval</code> · schema v1 · scores are not comparable across different suites</footer>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var bar=document.querySelector('.toolbar');
+  if(!bar)return;
+  bar.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest('button');
+    if(!b)return;
+    var open=b.dataset.act==='expand';
+    document.querySelectorAll('details.section, details.grader').forEach(function(d){d.open=open});
+  });
+});
+// Collapsed details vanish from print/PDF; these pages are share artifacts.
+window.addEventListener('beforeprint',function(){
+  document.querySelectorAll('details').forEach(function(d){
+    if(!d.open){d.dataset.printOpened='1';d.open=true}
+  });
+});
+window.addEventListener('afterprint',function(){
+  document.querySelectorAll('details[data-print-opened]').forEach(function(d){
+    d.open=false;delete d.dataset.printOpened;
+  });
+});
+</script>
+</body>
+</html>

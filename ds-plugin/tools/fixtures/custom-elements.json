@@ -1,0 +1,319 @@
+{
+  "schemaVersion": "2.1.0",
+  "readme": "EXEMPLO. Em produção este arquivo vem do build do Stencil (output target docs-custom-elements-manifest, Stencil >= 4.42).",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsButton",
+          "tagName": "ds-button",
+          "customElement": true,
+          "description": "Dispara uma ação na tela atual.",
+          "attributes": [
+            {
+              "name": "variant",
+              "type": {
+                "text": "'primary' | 'secondary' | 'ghost' | 'danger'"
+              },
+              "default": "'primary'",
+              "description": "Ênfase visual",
+              "fieldName": "variant"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "'sm' | 'md' | 'lg'"
+              },
+              "default": "'md'",
+              "description": "Altura e padding",
+              "fieldName": "size"
+            },
+            {
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'",
+              "description": "Tipo nativo",
+              "fieldName": "type"
+            },
+            {
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Mostra spinner e bloqueia clique",
+              "fieldName": "loading"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Desabilita",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "full-width",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Ocupa 100% do container",
+              "fieldName": "fullWidth"
+            }
+          ],
+          "events": [
+            {
+              "name": "dsClick",
+              "type": {
+                "text": "CustomEvent<MouseEvent>"
+              },
+              "description": "Clique, exceto em loading/disabled"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Rótulo"
+            },
+            {
+              "name": "start",
+              "description": "Ícone antes do rótulo (ds-icon)"
+            },
+            {
+              "name": "end",
+              "description": "Ícone depois do rótulo (ds-icon)"
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "native",
+              "description": "O <button> interno"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/modal/modal.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsModal",
+          "tagName": "ds-modal",
+          "customElement": true,
+          "description": "Interrupção que exige decisão do usuário.",
+          "attributes": [
+            {
+              "name": "heading",
+              "type": {
+                "text": "string"
+              },
+              "description": "Título acessível"
+            },
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Abre/fecha"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "'sm' | 'md' | 'lg'"
+              },
+              "default": "'md'",
+              "description": "Largura"
+            }
+          ],
+          "events": [
+            {
+              "name": "dsClose",
+              "type": {
+                "text": "CustomEvent<void>"
+              },
+              "description": "Fechou por ação do usuário"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Conteúdo"
+            },
+            {
+              "name": "footer",
+              "description": "Ações"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/old-dialog/old-dialog.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsOldDialog",
+          "tagName": "ds-old-dialog",
+          "customElement": true,
+          "description": "Diálogo legado.",
+          "deprecated": "Use ds-modal",
+          "attributes": [
+            {
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "description": "Título"
+            }
+          ],
+          "events": [
+            {
+              "name": "closed",
+              "type": {
+                "text": "CustomEvent<void>"
+              },
+              "description": "Fechou"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsChip",
+          "tagName": "ds-chip",
+          "customElement": true,
+          "description": "Rótulo curto para filtro selecionável ou destaque.",
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Texto do chip"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'highlight'"
+              },
+              "default": "'default'",
+              "description": "Neutro ou destaque de benefício"
+            },
+            {
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Selecionado (uso como filtro)"
+            }
+          ],
+          "events": [
+            {
+              "name": "dsChange",
+              "type": {
+                "text": "CustomEvent<boolean>"
+              },
+              "description": "Mudou a seleção"
+            }
+          ],
+          "slots": [
+            {
+              "name": "icon",
+              "description": "Ícone opcional"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip-premium/chip-premium.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsChipPremium",
+          "tagName": "ds-chip-premium",
+          "customElement": true,
+          "description": "Destaque de benefício exclusivo.",
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Texto do chip"
+            }
+          ],
+          "slots": [
+            {
+              "name": "icon",
+              "description": "Ícone opcional"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/bottom-sheet/bottom-sheet.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "DsBottomSheet",
+          "tagName": "ds-bottom-sheet",
+          "customElement": true,
+          "description": "Ação ou contexto secundário no mobile.",
+          "attributes": [
+            {
+              "name": "heading",
+              "type": {
+                "text": "string"
+              },
+              "description": "Título"
+            },
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Abre/fecha"
+            }
+          ],
+          "events": [
+            {
+              "name": "dsClose",
+              "type": {
+                "text": "CustomEvent<void>"
+              },
+              "description": "Fechou"
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Conteúdo"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

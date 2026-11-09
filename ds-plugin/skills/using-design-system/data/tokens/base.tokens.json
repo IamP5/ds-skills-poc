@@ -1,0 +1,348 @@
+{
+  "palette": {
+    "blue": {
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1216,
+            0.3098,
+            0.8196
+          ],
+          "hex": "#1f4fd1"
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0902,
+            0.2353,
+            0.6275
+          ],
+          "hex": "#173ca0"
+        }
+      }
+    },
+    "red": {
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7765,
+            0.1569,
+            0.1569
+          ],
+          "hex": "#c62828"
+        }
+      }
+    },
+    "green": {
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1804,
+            0.4902,
+            0.1961
+          ],
+          "hex": "#2e7d32"
+        }
+      }
+    },
+    "gold": {
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7882,
+            0.6353,
+            0.1529
+          ],
+          "hex": "#c9a227"
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6902,
+            0.549,
+            0.1176
+          ],
+          "hex": "#b08c1e"
+        }
+      }
+    },
+    "neutral": {
+      "0": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "hex": "#ffffff"
+        }
+      },
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.9647,
+            0.9725
+          ],
+          "hex": "#f5f6f8"
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3569,
+            0.3843,
+            0.4392
+          ],
+          "hex": "#5b6270"
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0902,
+            0.1216
+          ],
+          "hex": "#14171f"
+        }
+      },
+      "950": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1333,
+            0.1725
+          ],
+          "hex": "#1e222c"
+        }
+      }
+    }
+  },
+  "size": {
+    "4": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "12": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "24": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "40": {
+      "$type": "dimension",
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      }
+    },
+    "48": {
+      "$type": "dimension",
+      "$value": {
+        "value": 48,
+        "unit": "px"
+      }
+    }
+  },
+  "color": {
+    "action": {
+      "primary": {
+        "$type": "color",
+        "$value": "{palette.blue.600}",
+        "$description": "Fundo da ação principal"
+      },
+      "primary-hover": {
+        "$type": "color",
+        "$value": "{palette.blue.700}",
+        "$description": "Hover da ação principal"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "{palette.red.600}",
+        "$description": "Ações destrutivas"
+      }
+    },
+    "text": {
+      "default": {
+        "$type": "color",
+        "$value": "{palette.neutral.900}",
+        "$description": "Texto corrido"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{palette.neutral.600}",
+        "$description": "Texto de apoio"
+      },
+      "on-action": {
+        "$type": "color",
+        "$value": "{palette.neutral.0}",
+        "$description": "Texto sobre color.action.*"
+      }
+    },
+    "surface": {
+      "default": {
+        "$type": "color",
+        "$value": "{palette.neutral.0}",
+        "$description": "Fundo de página"
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{palette.neutral.50}",
+        "$description": "Cards, sheets"
+      }
+    },
+    "feedback": {
+      "success": {
+        "$type": "color",
+        "$value": "{palette.green.600}",
+        "$description": "Sucesso"
+      },
+      "error": {
+        "$type": "color",
+        "$value": "{palette.red.600}",
+        "$description": "Erro de validação ou sistema"
+      }
+    }
+  },
+  "space": {
+    "inset": {
+      "sm": {
+        "$type": "dimension",
+        "$value": "{size.8}",
+        "$description": "Padding interno pequeno"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "{size.16}",
+        "$description": "Padding interno padrão"
+      }
+    },
+    "stack": {
+      "md": {
+        "$type": "dimension",
+        "$value": "{size.16}",
+        "$description": "Espaço vertical entre blocos"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "{size.24}",
+        "$description": "Espaço vertical entre seções"
+      }
+    }
+  },
+  "radius": {
+    "control": {
+      "$type": "dimension",
+      "$value": "{size.8}",
+      "$description": "Inputs, botões"
+    },
+    "container": {
+      "$type": "dimension",
+      "$value": "{size.16}",
+      "$description": "Cards, sheets, modais"
+    }
+  },
+  "font": {
+    "heading": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": [
+          "Inter",
+          "Arial",
+          "sans-serif"
+        ],
+        "fontSize": {
+          "value": 24,
+          "unit": "px"
+        },
+        "fontWeight": 700,
+        "lineHeight": 1.25
+      },
+      "$description": "Títulos de tela e seção"
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": [
+          "Inter",
+          "Arial",
+          "sans-serif"
+        ],
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      },
+      "$description": "Texto corrido"
+    },
+    "label": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": [
+          "Inter",
+          "Arial",
+          "sans-serif"
+        ],
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "fontWeight": 600,
+        "lineHeight": 1.25
+      },
+      "$description": "Rótulos de controles"
+    }
+  }
+}

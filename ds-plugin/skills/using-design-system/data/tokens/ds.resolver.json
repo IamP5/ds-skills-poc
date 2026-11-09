@@ -1,0 +1,61 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+  "name": "Design System",
+  "version": "2025.10",
+  "description": "Resolve tokens por tema (segmento) e canal (plataforma).",
+  "sets": {
+    "foundation": {
+      "sources": [
+        {
+          "$ref": "base.tokens.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "description": "Segmento / marca",
+      "contexts": {
+        "default": [],
+        "premium": [
+          {
+            "$ref": "themes/premium.tokens.json"
+          }
+        ],
+        "pj": [
+          {
+            "$ref": "themes/pj.tokens.json"
+          }
+        ]
+      },
+      "default": "default"
+    },
+    "channel": {
+      "description": "Plataforma",
+      "contexts": {
+        "app": [
+          {
+            "$ref": "channels/app.tokens.json"
+          }
+        ],
+        "web": [
+          {
+            "$ref": "channels/web.tokens.json"
+          }
+        ]
+      },
+      "default": "app"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/foundation"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    },
+    {
+      "$ref": "#/modifiers/channel"
+    }
+  ]
+}

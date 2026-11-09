@@ -1,0 +1,337 @@
+{
+  "generatedAt": "2026-11-09T15:46:21.604Z",
+  "source": {
+    "cem": "custom-elements.json"
+  },
+  "items": [
+    {
+      "kind": "component",
+      "name": "ds-button",
+      "summary": "Dispara uma ação na tela atual",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [],
+      "mimics": [
+        "<button"
+      ],
+      "doc": "references/components/button.crd.md",
+      "api": {
+        "attributes": [
+          {
+            "name": "variant",
+            "type": "'primary' | 'secondary' | 'ghost' | 'danger'",
+            "values": [
+              "primary",
+              "secondary",
+              "ghost",
+              "danger"
+            ]
+          },
+          {
+            "name": "size",
+            "type": "'sm' | 'md' | 'lg'",
+            "values": [
+              "sm",
+              "md",
+              "lg"
+            ]
+          },
+          {
+            "name": "type",
+            "type": "'button' | 'submit' | 'reset'",
+            "values": [
+              "button",
+              "submit",
+              "reset"
+            ]
+          },
+          {
+            "name": "loading",
+            "type": "boolean"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean"
+          },
+          {
+            "name": "full-width",
+            "type": "boolean"
+          }
+        ],
+        "events": [
+          "dsClick"
+        ],
+        "slots": [
+          "",
+          "start",
+          "end"
+        ],
+        "cssParts": [
+          "native"
+        ]
+      },
+      "readiness": {
+        "state": "blocked",
+        "gaps": [
+          {
+            "code": "dangling-ref",
+            "detail": "ds-link não existe no catálogo (Fora de escopo, linha 49)"
+          },
+          {
+            "code": "dangling-ref",
+            "detail": "ds-icon-button não existe no catálogo (Fora de escopo, linha 50)"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "component",
+      "name": "ds-modal",
+      "summary": "Interrupção que exige decisão do usuário",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [],
+      "doc": "references/components/modal.crd.md",
+      "api": {
+        "attributes": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "name": "open",
+            "type": "boolean"
+          },
+          {
+            "name": "size",
+            "type": "'sm' | 'md' | 'lg'",
+            "values": [
+              "sm",
+              "md",
+              "lg"
+            ]
+          }
+        ],
+        "events": [
+          "dsClose"
+        ],
+        "slots": [
+          "",
+          "footer"
+        ],
+        "cssParts": []
+      },
+      "readiness": {
+        "state": "ready"
+      }
+    },
+    {
+      "kind": "component",
+      "name": "ds-old-dialog",
+      "summary": "Diálogo legado",
+      "lifecycle": "deprecated",
+      "replacement": "ds-modal",
+      "channels": [
+        "*"
+      ],
+      "tags": [],
+      "doc": "references/components/old-dialog.crd.md",
+      "api": {
+        "attributes": [
+          {
+            "name": "title",
+            "type": "string"
+          }
+        ],
+        "events": [
+          "closed"
+        ],
+        "slots": [],
+        "cssParts": []
+      },
+      "readiness": {
+        "state": "ready"
+      }
+    },
+    {
+      "kind": "component",
+      "name": "ds-chip",
+      "summary": "Rótulo curto para filtro selecionável ou destaque de benefício",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [],
+      "doc": "references/components/chip.crd.md",
+      "api": {
+        "attributes": [
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "variant",
+            "type": "'default' | 'highlight'",
+            "values": [
+              "default",
+              "highlight"
+            ]
+          },
+          {
+            "name": "selected",
+            "type": "boolean"
+          }
+        ],
+        "events": [
+          "dsChange"
+        ],
+        "slots": [
+          "icon"
+        ],
+        "cssParts": []
+      },
+      "readiness": {
+        "state": "blocked",
+        "gaps": [
+          {
+            "code": "dangling-ref",
+            "detail": "ds-badge não existe no catálogo (Fora de escopo, linha 37)"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "component",
+      "name": "ds-chip-premium",
+      "summary": "Destaque de benefício exclusivo do segmento premium",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "themes": [
+        "premium"
+      ],
+      "tags": [],
+      "doc": "references/components/chip-premium.crd.md",
+      "api": {
+        "attributes": [
+          {
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "events": [],
+        "slots": [
+          "icon"
+        ],
+        "cssParts": []
+      },
+      "readiness": {
+        "state": "blocked",
+        "gaps": [
+          {
+            "code": "open",
+            "detail": "C1: Limite de texto do `rotulo` e uso sem `icone` ainda não definidos."
+          },
+          {
+            "code": "dangling-ref",
+            "detail": "ds-badge não existe no catálogo (Fora de escopo, linha 31)"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "component",
+      "name": "ds-bottom-sheet",
+      "summary": "Ação ou contexto secundário no mobile.",
+      "lifecycle": "sem-lifecycle",
+      "channels": [
+        "*"
+      ],
+      "tags": [],
+      "api": {
+        "attributes": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "name": "open",
+            "type": "boolean"
+          }
+        ],
+        "events": [
+          "dsClose"
+        ],
+        "slots": [
+          ""
+        ],
+        "cssParts": []
+      },
+      "readiness": {
+        "state": "blocked",
+        "gaps": [
+          {
+            "code": "no-crd",
+            "detail": "ds-bottom-sheet não tem CRD em references/components/"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "template",
+      "name": "FilterSheetFlow",
+      "summary": "Filtros múltiplos em sheet com aplicar/limpar e contador de filtros ativos",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [
+        "filtro",
+        "filtrar",
+        "extrato",
+        "sheet",
+        "busca"
+      ],
+      "doc": "references/templates/filter-sheet-flow.md"
+    },
+    {
+      "kind": "template",
+      "name": "OverlayStack",
+      "summary": "Overlays empilhados (modal sobre sheet) sem quebrar foco, scroll nem z-index",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [
+        "modal",
+        "sheet",
+        "overlay",
+        "empilhar",
+        "confirmação"
+      ],
+      "doc": "references/templates/overlay-stack.md"
+    },
+    {
+      "kind": "service",
+      "name": "BodyScrollManager",
+      "summary": "Trava/destrava o scroll do body com contagem de referências",
+      "lifecycle": "built",
+      "channels": [
+        "*"
+      ],
+      "tags": [
+        "scroll",
+        "travar",
+        "lock",
+        "overflow",
+        "modal"
+      ],
+      "doc": "references/services/body-scroll-manager.md"
+    }
+  ]
+}
